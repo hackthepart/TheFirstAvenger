@@ -54,9 +54,11 @@ public class GameWindow extends javax.swing.JFrame {
     }
     
     private void check(int currentPlayer){
-        String currentPlayerMove = "O";
+        String currentPlayerMove;
         if(currentPlayer == 1)
             currentPlayerMove = playerTwoOption;
+        else
+            currentPlayerMove = playerOneOption;
         boolean isGameOver = false, flag;
 
         // checking horizontal match
