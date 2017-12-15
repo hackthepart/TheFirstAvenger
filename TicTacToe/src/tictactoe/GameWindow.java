@@ -30,6 +30,7 @@ public class GameWindow extends javax.swing.JFrame {
     private String playerNameTwo;
     private String playerOneOption = null;
     private String playerTwoOption = null;
+    private Integer count = 0;
     JPanel playingArea = new JPanel();
     private void reset(){
         for(int i = 0; i < 3; i++){
@@ -38,6 +39,7 @@ public class GameWindow extends javax.swing.JFrame {
             }
         }
         currentPlayer = 0;
+        jLabel3.setText("");
     }
 
     private void endGame(int currentPlayer){
@@ -53,7 +55,7 @@ public class GameWindow extends javax.swing.JFrame {
     private void check(int currentPlayer){
         String currentPlayerMove = "O";
         if(currentPlayer == 1)
-            currentPlayerMove = "X";
+            currentPlayerMove = playerTwoOption;
         boolean isGameOver = false, flag;
 
         // checking horizontal match
@@ -65,7 +67,7 @@ public class GameWindow extends javax.swing.JFrame {
             if(flag)
                 isGameOver = true;
         }
-        
+        System.out.println(""+isGameOver);
         // checking vertical match
         for(int j = 0; j < 3; j++){
             flag = true;
@@ -95,6 +97,10 @@ public class GameWindow extends javax.swing.JFrame {
         
         if(isGameOver)
             endGame(currentPlayer);
+        if(count == 9 && isGameOver == false){
+            JOptionPane.showMessageDialog(this,"Its A Draw!!");
+            reset();
+        }
         
     }
     
@@ -105,6 +111,7 @@ public class GameWindow extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this,"This Position Already Chosen");
             }
         else{
+            count++;
         if(currentPlayer == 0){
             currentCell.setText(""+playerOneOption);
             player = true;
@@ -251,7 +258,9 @@ public class GameWindow extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(156, 156, 156)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton1)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jButton1)
+                                .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
