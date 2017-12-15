@@ -26,11 +26,12 @@ public class GameWindow extends javax.swing.JFrame {
     private JLabel playingLabels[][] = new JLabel[3][3];
     private final int PLAYINGAREAX = 110, PLAYINGAREAY = 100, CELLSIZE = 40, SPACEBETWEENCELLS = 10;
     private int currentPlayer = 0;
-    
+    int moved[][]=new int[3][3];
     private void reset(){
         for(int i = 0; i < 3; i++){
             for(int j = 0; j < 3; j++){
                 playingLabels[i][j].setText(".");
+                moved[i][j]=0;
             }
         }
         currentPlayer = 0;
@@ -96,14 +97,20 @@ public class GameWindow extends javax.swing.JFrame {
     
     private void cellClicked(MouseEvent evt){
         JLabel currentCell = (JLabel) evt.getComponent();
-        if(currentPlayer == 0){
-            currentCell.setText("O");
+        int x = currentCell.getX()/50;
+        int y = currentCell.getY()/50;
+        if(moved[x][y]==0)
+        {
+            if(currentPlayer == 0){
+                currentCell.setText("O");
+            }
+            else{
+                currentCell.setText("X");
+            }
+            currentPlayer = (currentPlayer + 1) % 2;
+            check( (currentPlayer + 1) % 2 );
+            moved[x][y]=1;
         }
-        else{
-            currentCell.setText("X");
-        }
-        currentPlayer = (currentPlayer + 1) % 2;
-        check( (currentPlayer + 1) % 2 );
     }
     
     private void addPlayingComponents(JPanel playingArea){
