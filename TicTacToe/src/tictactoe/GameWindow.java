@@ -26,7 +26,8 @@ public class GameWindow extends javax.swing.JFrame {
     private JLabel playingLabels[][] = new JLabel[3][3];
     private final int PLAYINGAREAX = 110, PLAYINGAREAY = 100, CELLSIZE = 40, SPACEBETWEENCELLS = 10;
     private int currentPlayer = 0;
-    
+    private String playerNameOne;
+    private String playerNameTwo;
     private void reset(){
         for(int i = 0; i < 3; i++){
             for(int j = 0; j < 3; j++){
@@ -96,6 +97,10 @@ public class GameWindow extends javax.swing.JFrame {
     
     private void cellClicked(MouseEvent evt){
         JLabel currentCell = (JLabel) evt.getComponent();
+        if(!(currentCell.getText() == ".")){
+                JOptionPane.showMessageDialog(this,"This Position Already Chosen");
+            }
+        else{
         if(currentPlayer == 0){
             currentCell.setText("O");
         }
@@ -104,6 +109,7 @@ public class GameWindow extends javax.swing.JFrame {
         }
         currentPlayer = (currentPlayer + 1) % 2;
         check( (currentPlayer + 1) % 2 );
+        }
     }
     
     private void addPlayingComponents(JPanel playingArea){
@@ -137,7 +143,8 @@ public class GameWindow extends javax.swing.JFrame {
         playingArea.setLayout(null);
         add(playingArea);
         addPlayingComponents(playingArea);
-        
+        playerNameOne = JOptionPane.showInputDialog("Enter Player One Name");
+        playerNameTwo = JOptionPane.showInputDialog("Enter Player Two Name To Start");
     }
 
     /**
