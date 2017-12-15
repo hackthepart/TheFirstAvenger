@@ -40,6 +40,7 @@ public class GameWindow extends javax.swing.JFrame {
         }
         currentPlayer = 0;
         jLabel3.setText("");
+        count = 0;
     }
 
     private void endGame(int currentPlayer){
@@ -67,7 +68,6 @@ public class GameWindow extends javax.swing.JFrame {
             if(flag)
                 isGameOver = true;
         }
-        System.out.println(""+isGameOver);
         // checking vertical match
         for(int j = 0; j < 3; j++){
             flag = true;
