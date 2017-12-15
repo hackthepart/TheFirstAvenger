@@ -125,9 +125,9 @@ public class GameWindow extends javax.swing.JFrame {
         check( (currentPlayer + 1) % 2 );
         }
         if(player){
-            jLabel3.setText(""+playerNameTwo);
+            jLabel3.setText(""+playerNameTwo+"'s Chance");
         }else{
-            jLabel3.setText(""+playerNameOne);
+            jLabel3.setText(""+playerNameOne+"'s Chance");
         }
     }
     
@@ -255,18 +255,17 @@ public class GameWindow extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(119, 119, 119)
-                        .addComponent(title))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(156, 156, 156)
+                        .addComponent(jButton1)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(119, 119, 119)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButton1)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
-                                .addComponent(jLabel2)))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 83, Short.MAX_VALUE)
+                                .addComponent(jLabel2))
+                            .addComponent(title))))
                 .addGap(41, 41, 41))
         );
         layout.setVerticalGroup(
@@ -338,7 +337,7 @@ public class GameWindow extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        jLabel3.setText(""+playerNameOne);
+        jLabel3.setText(""+playerNameOne+"'s Chance");
         if((playerOneOption != null)&&(playerTwoOption != null) ){
            playingArea.setVisible(true);
         }
