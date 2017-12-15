@@ -26,18 +26,32 @@ public class GameWindow extends javax.swing.JFrame {
     private JLabel playingLabels[][] = new JLabel[3][3];
     private final int PLAYINGAREAX = 110, PLAYINGAREAY = 100, CELLSIZE = 40, SPACEBETWEENCELLS = 10;
     private int currentPlayer = 0;
-    
+    int moved[][]=new int[3][3];
+    String name1,name2;
+    boolean play=false;
     private void reset(){
         for(int i = 0; i < 3; i++){
             for(int j = 0; j < 3; j++){
                 playingLabels[i][j].setText(".");
+                moved[i][j]=0;
             }
-        }
+        } 
+        nextButton.setVisible(true);
+        startButton.setVisible(false);
+        startButton.setEnabled(true);
+        playerLabel.setText("Player 1 Name :");
+        chanceLabel.setText("");
+        nameTextfield.setText("");
+        nameTextfield.setEditable(true);
         currentPlayer = 0;
+        play=false;
     }
 
     private void endGame(int currentPlayer){
-        JOptionPane.showMessageDialog(null, "Player " + (currentPlayer + 1) + " Wins !!!");
+        if(currentPlayer==0)
+            JOptionPane.showMessageDialog(null, name1 + " Wins !!!");
+        else
+            JOptionPane.showMessageDialog(null, name2 + " Wins !!!");
         int playAgainOrNot = JOptionPane.showConfirmDialog(null, "Want to play again???", "Continue?", 0);
         if(playAgainOrNot == JOptionPane.YES_OPTION)
             reset();
@@ -96,14 +110,23 @@ public class GameWindow extends javax.swing.JFrame {
     
     private void cellClicked(MouseEvent evt){
         JLabel currentCell = (JLabel) evt.getComponent();
-        if(currentPlayer == 0){
-            currentCell.setText("O");
+        int x = currentCell.getX()/50;
+        int y = currentCell.getY()/50;
+        if(moved[x][y]==0&&play==true)
+        {
+            if(currentPlayer == 0){
+                currentCell.setText("O");
+                chanceLabel.setText(name2+" CHANCE");
+
+            }
+            else{
+                currentCell.setText("X");
+                chanceLabel.setText(name1+" CHANCE");
+            }
+            currentPlayer = (currentPlayer + 1) % 2;
+            check( (currentPlayer + 1) % 2 );
+        moved[x][y]=1;
         }
-        else{
-            currentCell.setText("X");
-        }
-        currentPlayer = (currentPlayer + 1) % 2;
-        check( (currentPlayer + 1) % 2 );
     }
     
     private void addPlayingComponents(JPanel playingArea){
@@ -116,7 +139,7 @@ public class GameWindow extends javax.swing.JFrame {
                 playingLabels[i][j].setLocation(i * (CELLSIZE + SPACEBETWEENCELLS), j * (CELLSIZE + SPACEBETWEENCELLS));
                 playingLabels[i][j].setSize(CELLSIZE, CELLSIZE);
                 playingArea.add(playingLabels[i][j]);
-                
+                startButton.setVisible(false);
                 playingLabels[i][j].addMouseListener(new MouseAdapter() {
                     public void mouseClicked(MouseEvent evt){
                         cellClicked(evt);
@@ -150,31 +173,107 @@ public class GameWindow extends javax.swing.JFrame {
     private void initComponents() {
 
         title = new javax.swing.JLabel();
+        playerLabel = new javax.swing.JLabel();
+        nameTextfield = new javax.swing.JTextField();
+        nextButton = new javax.swing.JButton();
+        startButton = new javax.swing.JButton();
+        chanceLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         title.setFont(new java.awt.Font("Ubuntu", 1, 24)); // NOI18N
         title.setText("TIC TAC TOE");
 
+        playerLabel.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        playerLabel.setText("Player 1 Name :");
+
+        nameTextfield.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        nameTextfield.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nameTextfieldActionPerformed(evt);
+            }
+        });
+
+        nextButton.setText("Next");
+        nextButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nextButtonActionPerformed(evt);
+            }
+        });
+
+        startButton.setText("Start");
+        startButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                startButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(119, 119, 119)
-                .addComponent(title)
-                .addContainerGap(108, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(title)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(playerLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(chanceLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
+                            .addComponent(nameTextfield, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(startButton, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(nextButton, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(title)
-                .addContainerGap(323, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(playerLabel)
+                    .addComponent(nameTextfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(nextButton)
+                    .addComponent(startButton))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 247, Short.MAX_VALUE)
+                .addComponent(chanceLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
+
+        chanceLabel.getAccessibleContext().setAccessibleName("");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void nameTextfieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameTextfieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_nameTextfieldActionPerformed
+
+    private void nextButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextButtonActionPerformed
+    name1 = nameTextfield.getText();
+    startButton.setLocation(nextButton.getX(), nextButton.getY());
+    nextButton.setVisible(false);
+    startButton.setVisible(true);
+    nameTextfield.setText("");
+    playerLabel.setText("Player 2 Name :");
+    
+    }//GEN-LAST:event_nextButtonActionPerformed
+
+    private void startButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startButtonActionPerformed
+    nameTextfield.setEditable(false);
+    name2 = nameTextfield.getText();
+        System.out.println(name1+name2);
+        chanceLabel.setText(name1+" CHANCE");
+        startButton.setEnabled(false);
+        play=true;
+    }//GEN-LAST:event_startButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -212,6 +311,11 @@ public class GameWindow extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel chanceLabel;
+    private javax.swing.JTextField nameTextfield;
+    private javax.swing.JButton nextButton;
+    private javax.swing.JLabel playerLabel;
+    private javax.swing.JButton startButton;
     private javax.swing.JLabel title;
     // End of variables declaration//GEN-END:variables
 }
