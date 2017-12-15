@@ -99,6 +99,7 @@ public class GameWindow extends javax.swing.JFrame {
     }
     
     private void cellClicked(MouseEvent evt){
+        boolean player = false;
         JLabel currentCell = (JLabel) evt.getComponent();
         if(!(".".equals(currentCell.getText()))){
                 JOptionPane.showMessageDialog(this,"This Position Already Chosen");
@@ -106,12 +107,18 @@ public class GameWindow extends javax.swing.JFrame {
         else{
         if(currentPlayer == 0){
             currentCell.setText(""+playerOneOption);
+            player = true;
         }
         else{
             currentCell.setText(""+playerTwoOption);
         }
         currentPlayer = (currentPlayer + 1) % 2;
         check( (currentPlayer + 1) % 2 );
+        }
+        if(player){
+            jLabel3.setText(""+playerNameTwo);
+        }else{
+            jLabel3.setText(""+playerNameOne);
         }
     }
     
@@ -171,6 +178,7 @@ public class GameWindow extends javax.swing.JFrame {
         jRadioButton3 = new javax.swing.JRadioButton();
         jRadioButton4 = new javax.swing.JRadioButton();
         jButton1 = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -231,13 +239,9 @@ public class GameWindow extends javax.swing.JFrame {
                     .addComponent(jRadioButton1)
                     .addComponent(jRadioButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jRadioButton3)
-                        .addComponent(jRadioButton4))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(2, 2, 2)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jRadioButton3)
+                    .addComponent(jRadioButton4))
                 .addGap(48, 48, 48))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -246,8 +250,13 @@ public class GameWindow extends javax.swing.JFrame {
                         .addComponent(title))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(156, 156, 156)
-                        .addComponent(jButton1)))
-                .addContainerGap(108, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton1)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
+                                .addComponent(jLabel2)))))
+                .addGap(41, 41, 41))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -255,9 +264,11 @@ public class GameWindow extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(title)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel1)
+                        .addComponent(jLabel2))
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jRadioButton1)
@@ -276,26 +287,47 @@ public class GameWindow extends javax.swing.JFrame {
 
     private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
         // TODO add your handling code here:
+        if(playerTwoOption != "X" || playerTwoOption == null){
         playerOneOption = "X";
+        }else{
+            JOptionPane.showMessageDialog(this,"Option Already Chosen by other oponent");
+            jRadioButton2.setSelected(true);
+        }
     }//GEN-LAST:event_jRadioButton1ActionPerformed
 
     private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
         // TODO add your handling code here:
+        if(playerTwoOption != "O" || playerTwoOption == null){
         playerOneOption = "O";
+        }else{
+            JOptionPane.showMessageDialog(this,"Option Already Chosen by other oponent");
+            jRadioButton1.setSelected(true);
+        }
     }//GEN-LAST:event_jRadioButton2ActionPerformed
 
     private void jRadioButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton3ActionPerformed
         // TODO add your handling code here:
+         if(playerOneOption != "X" || playerOneOption == null){
         playerTwoOption = "X";
+         }else{
+             JOptionPane.showMessageDialog(this,"Option Already Chosen by other oponent");
+            jRadioButton4.setSelected(true);
+        }  
     }//GEN-LAST:event_jRadioButton3ActionPerformed
 
     private void jRadioButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton4ActionPerformed
         // TODO add your handling code here:
+        if(playerOneOption != "O" || playerOneOption == null){
         playerTwoOption = "O";
+        }else{
+            JOptionPane.showMessageDialog(this,"Option Already Chosen by other oponent");
+            jRadioButton3.setSelected(true);
+        }
     }//GEN-LAST:event_jRadioButton4ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        jLabel3.setText(""+playerNameOne);
         if((playerOneOption != null)&&(playerTwoOption != null) ){
            playingArea.setVisible(true);
         }
@@ -353,6 +385,7 @@ public class GameWindow extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JRadioButton jRadioButton3;
