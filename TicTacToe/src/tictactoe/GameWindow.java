@@ -38,17 +38,29 @@ public class GameWindow extends javax.swing.JFrame {
             }
         }
         currentPlayer = 0;
+        int changeName = JOptionPane.showConfirmDialog(null, "Want to change names and symbol???", "Continue?", 0);
+        if(changeName == JOptionPane.YES_OPTION){
+            jTextField1.setEnabled(true);
+            jTextField2.setEnabled(true);
+            jTextField3.setEnabled(true);
+            jTextField4.setEnabled(true);
+        }
     }
 
     private void endGame(int currentPlayer){
         if(currentPlayer == 747){
         JOptionPane.showMessageDialog(null, "Draw :)");  
-        int playAgainOrNot = JOptionPane.showConfirmDialog(null, "Want to play again???", "Continue?", 0);
-            if(playAgainOrNot == JOptionPane.YES_OPTION)
+        moves = 9;
+        /*int playAgainOrNot = JOptionPane.showConfirmDialog(null, "Want to play again???", "Continue?", 0);
+            if(playAgainOrNot == JOptionPane.YES_OPTION){
                 reset();
+                return;
+            }
             else 
                 dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+        */
         }
+        else{
             String temp;
             if(currentPlayer == 0){
             temp = p1Name;
@@ -57,6 +69,7 @@ public class GameWindow extends javax.swing.JFrame {
             temp = p2Name;
             }
             JOptionPane.showMessageDialog(null, "Player " + (currentPlayer + 1) + "(" + temp + ")" + " Wins !!!");
+        }
             int playAgainOrNot = JOptionPane.showConfirmDialog(null, "Want to play again???", "Continue?", 0);
             if(playAgainOrNot == JOptionPane.YES_OPTION)
                 reset();
@@ -117,10 +130,10 @@ public class GameWindow extends javax.swing.JFrame {
             }
         }
         
-        if(moves == 0){
-        endGame(747);//my team code :p
+        if(moves == 0 && isGameOver != true){
+        endGame(747);
         }
-        if(isGameOver)
+        else if(isGameOver)
             endGame(currentPlayer);
         
     }
@@ -352,10 +365,12 @@ public class GameWindow extends javax.swing.JFrame {
         else{
         sameSymbol = false;
         }
-        
+        /*
         System.out.println(!sameSymbol&&!sameName);
         System.out.println(sameName);
         System.out.println(sameSymbol);
+        */
+        //Check for exceptions in names and Symbol
         if(!sameSymbol&&!sameName){
         jTextField1.setEnabled(false);
         jTextField2.setEnabled(false);
