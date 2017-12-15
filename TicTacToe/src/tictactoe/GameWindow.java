@@ -96,14 +96,23 @@ public class GameWindow extends javax.swing.JFrame {
     
     private void cellClicked(MouseEvent evt){
         JLabel currentCell = (JLabel) evt.getComponent();
-        if(currentPlayer == 0){
+        String temp = currentCell.getText();
+        //System.out.println(temp + (temp == "."));
+        if(temp == "."){
+            if(currentPlayer == 0){
             currentCell.setText("O");
+            jLabel4.setText("Player: 2");
+            }
+            else{
+                currentCell.setText("X");
+                jLabel4.setText("Player: 1");
+            }
+            currentPlayer = (currentPlayer + 1) % 2;
+            check( (currentPlayer + 1) % 2 );
         }
         else{
-            currentCell.setText("X");
+        JOptionPane.showMessageDialog(null, "Not an empty place!!!");
         }
-        currentPlayer = (currentPlayer + 1) % 2;
-        check( (currentPlayer + 1) % 2 );
     }
     
     private void addPlayingComponents(JPanel playingArea){
