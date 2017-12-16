@@ -34,7 +34,7 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="player1" max="32767" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                              <Component id="player1Label" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="0" pref="18" max="32767" attributes="0"/>
                           </Group>
                       </Group>
@@ -43,7 +43,7 @@
                           <Group type="102" alignment="1" attributes="0">
                               <Component id="title" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="48" max="-2" attributes="0"/>
-                              <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+                              <Component id="player2Label" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Group type="103" alignment="1" groupAlignment="0" max="-2" attributes="0">
                               <Component id="player2Marker" alignment="1" pref="64" max="32767" attributes="0"/>
@@ -66,9 +66,9 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jLabel1" alignment="0" min="-2" pref="23" max="-2" attributes="0"/>
+                  <Component id="player1Label" alignment="0" min="-2" pref="23" max="-2" attributes="0"/>
                   <Component id="title" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="jLabel2" alignment="0" min="-2" pref="22" max="-2" attributes="0"/>
+                  <Component id="player2Label" alignment="0" min="-2" pref="22" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
@@ -97,12 +97,12 @@
         <Property name="text" type="java.lang.String" value="TIC TAC TOE"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabel1">
+    <Component class="javax.swing.JLabel" name="player1Label">
       <Properties>
         <Property name="text" type="java.lang.String" value="Player1 "/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabel2">
+    <Component class="javax.swing.JLabel" name="player2Label">
       <Properties>
         <Property name="horizontalAlignment" type="int" value="0"/>
         <Property name="text" type="java.lang.String" value="Player 2"/>
@@ -130,7 +130,6 @@
           <Font name="Tahoma" size="18" style="1"/>
         </Property>
         <Property name="horizontalAlignment" type="int" value="0"/>
-        <Property name="text" type="java.lang.String" value="jLabel3"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="player1Marker">

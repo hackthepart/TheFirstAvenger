@@ -124,8 +124,10 @@ public class GameWindow extends javax.swing.JFrame {
         if(cell.getText().equals("."))
             valid=true;
         else
-        {JOptionPane.showMessageDialog(null, "Not A Valid Move", "Alert", JOptionPane.ERROR_MESSAGE);
-        valid=false;}
+        {
+            JOptionPane.showMessageDialog(null, "Not A Valid Move", "Alert", JOptionPane.ERROR_MESSAGE);
+            valid=false;
+        }
         return valid;
     }
     
@@ -182,8 +184,6 @@ public class GameWindow extends javax.swing.JFrame {
         player2.setText(GameSetup.secondPlayer);
         player1Marker.setText(firstMarker);
         player2Marker.setText(secondMarker);
-
-        
         turn.setText(GameSetup.firstPlayer+"'s turn");
         JPanel playingArea = new JPanel();
         playingArea.setLocation(PLAYINGAREAX, PLAYINGAREAY);
@@ -205,8 +205,8 @@ public class GameWindow extends javax.swing.JFrame {
     private void initComponents() {
 
         title = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        player1Label = new javax.swing.JLabel();
+        player2Label = new javax.swing.JLabel();
         player1 = new javax.swing.JLabel();
         player2 = new javax.swing.JLabel();
         turn = new javax.swing.JLabel();
@@ -219,10 +219,10 @@ public class GameWindow extends javax.swing.JFrame {
         title.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         title.setText("TIC TAC TOE");
 
-        jLabel1.setText("Player1 ");
+        player1Label.setText("Player1 ");
 
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("Player 2");
+        player2Label.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        player2Label.setText("Player 2");
 
         player1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         player1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -232,7 +232,6 @@ public class GameWindow extends javax.swing.JFrame {
 
         turn.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         turn.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        turn.setText("jLabel3");
 
         player1Marker.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         player1Marker.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -254,14 +253,14 @@ public class GameWindow extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(player1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1)
+                                .addComponent(player1Label)
                                 .addGap(0, 18, Short.MAX_VALUE)))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(title)
                                 .addGap(48, 48, 48)
-                                .addComponent(jLabel2))
+                                .addComponent(player2Label))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(player2Marker, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 64, Short.MAX_VALUE)
                                 .addComponent(player2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
@@ -276,9 +275,9 @@ public class GameWindow extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(player1Label, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(title)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(player2Label, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(19, 19, 19)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(player2, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -333,11 +332,11 @@ public class GameWindow extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel player1;
+    private javax.swing.JLabel player1Label;
     private javax.swing.JLabel player1Marker;
     private javax.swing.JLabel player2;
+    private javax.swing.JLabel player2Label;
     private javax.swing.JLabel player2Marker;
     private javax.swing.JLabel title;
     private javax.swing.JLabel turn;
