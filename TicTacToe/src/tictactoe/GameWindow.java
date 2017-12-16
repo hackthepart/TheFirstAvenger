@@ -40,9 +40,9 @@ public class GameWindow extends javax.swing.JFrame {
 
     private void endGame(int currentPlayer){
         if((currentPlayer + 1)==0)
-        JOptionPane.showMessageDialog(null, GameSetup.firstPlayer + " Wins !!!");
+        JOptionPane.showMessageDialog(null, GameSetup.secondPlayer+ " Wins !!!");
         else
-                    JOptionPane.showMessageDialog(null, GameSetup.secondPlayer + " Wins !!!");
+                    JOptionPane.showMessageDialog(null, GameSetup.firstPlayer + " Wins !!!");
 
         int playAgainOrNot = JOptionPane.showConfirmDialog(null, "Want to play again???", "Continue?", 0);
         if(playAgainOrNot == JOptionPane.YES_OPTION)
