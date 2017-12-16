@@ -26,7 +26,7 @@ public class GameWindow extends javax.swing.JFrame {
      */
     private JLabel playingLabels[][] = new JLabel[3][3];
     private final int PLAYINGAREAX = 110, PLAYINGAREAY = 100, CELLSIZE = 40, SPACEBETWEENCELLS = 10;
-    private int currentPlayer = 0,moves=777;
+    private int currentPlayer = 0,moves;
     private String p1Symbol = "O", p2Symbol = "X",p1Name,p2Name;
     private boolean sameName = true;
     private boolean sameSymbol = true;
@@ -49,16 +49,8 @@ public class GameWindow extends javax.swing.JFrame {
 
     private void endGame(int currentPlayer){
         if(currentPlayer == 747){
-        JOptionPane.showMessageDialog(null, "Draw :)");  
-        moves = 9;
-        /*int playAgainOrNot = JOptionPane.showConfirmDialog(null, "Want to play again???", "Continue?", 0);
-            if(playAgainOrNot == JOptionPane.YES_OPTION){
-                reset();
-                return;
-            }
-            else 
-                dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
-        */
+            JOptionPane.showMessageDialog(null, "Draw :)");  
+            moves = 9;
         }
         else{
             String temp;
@@ -70,11 +62,11 @@ public class GameWindow extends javax.swing.JFrame {
             }
             JOptionPane.showMessageDialog(null, "Player " + (currentPlayer + 1) + "(" + temp + ")" + " Wins !!!");
         }
-            int playAgainOrNot = JOptionPane.showConfirmDialog(null, "Want to play again???", "Continue?", 0);
-            if(playAgainOrNot == JOptionPane.YES_OPTION)
-                reset();
-            else 
-                dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+        int playAgainOrNot = JOptionPane.showConfirmDialog(null, "Want to play again???", "Continue?", 0);
+        if(playAgainOrNot == JOptionPane.YES_OPTION)
+            reset();
+        else 
+            dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
     }
     
     private void check(int currentPlayer){
@@ -129,28 +121,29 @@ public class GameWindow extends javax.swing.JFrame {
                 }
             }
         }
-        
+        //for draw
         if(moves == 0 && isGameOver != true){
         endGame(747);
         }
+        //for any player win
         else if(isGameOver)
             endGame(currentPlayer);
         
     }
     
     private void cellClicked(MouseEvent evt){
-        System.out.println(moves);
+        //checking conditions for start playing without pressing button
         if(jTextField1.getText().equals("")){
-        JOptionPane.showMessageDialog(null, "Enter Player 1 Name!!");
-        return;    
+            JOptionPane.showMessageDialog(null, "Enter Player 1 Name!!");
+            return;    
         }
         if(jTextField2.getText().equals("")){
             JOptionPane.showMessageDialog(null, "Enter Player 2 Name!!");
             return;    
         }
         if(jTextField3.getText().equals("")){
-        JOptionPane.showMessageDialog(null, "Enter Player 1 Symbol!!");
-        return;    
+            JOptionPane.showMessageDialog(null, "Enter Player 1 Symbol!!");
+            return;    
         }
         if(jTextField4.getText().equals("")){
             JOptionPane.showMessageDialog(null, "Enter Player 2 Symbol!!");
@@ -167,21 +160,20 @@ public class GameWindow extends javax.swing.JFrame {
         lock();
         JLabel currentCell = (JLabel) evt.getComponent();
         String temp = currentCell.getText();
-        //System.out.println(temp + (temp == "."));
         if(temp == "."){
             if(currentPlayer == 0){
-            currentCell.setText(p1Symbol);
-            jLabel4.setText(p2Name);
+                currentCell.setText(p1Symbol);
+                jLabel4.setText(p2Name);
             }
             else{
                 currentCell.setText(p2Symbol);
                 jLabel4.setText(p1Name);
             }
-        currentPlayer = (currentPlayer + 1) % 2;
-        check( (currentPlayer + 1) % 2 );
+            currentPlayer = (currentPlayer + 1) % 2;
+            check( (currentPlayer + 1) % 2 );
         }
         else{
-        JOptionPane.showMessageDialog(null, "Not an empty place!!!");
+            JOptionPane.showMessageDialog(null, "Not an empty place!!!");
         }
     }
     
@@ -194,8 +186,7 @@ public class GameWindow extends javax.swing.JFrame {
                 playingLabels[i][j].setVisible(true);
                 playingLabels[i][j].setLocation(i * (CELLSIZE + SPACEBETWEENCELLS), j * (CELLSIZE + SPACEBETWEENCELLS));
                 playingLabels[i][j].setSize(CELLSIZE, CELLSIZE);
-                playingArea.add(playingLabels[i][j]);
-                
+                playingArea.add(playingLabels[i][j]);    
                 playingLabels[i][j].addMouseListener(new MouseAdapter() {
                     public void mouseClicked(MouseEvent evt){
                         cellClicked(evt);
@@ -246,8 +237,10 @@ public class GameWindow extends javax.swing.JFrame {
         title.setFont(new java.awt.Font("Ubuntu", 1, 24)); // NOI18N
         title.setText("TIC TAC TOE");
 
+        jLabel1.setFont(new java.awt.Font("Tahoma", 3, 11)); // NOI18N
         jLabel1.setText("Player 1");
 
+        jLabel2.setFont(new java.awt.Font("Tahoma", 3, 11)); // NOI18N
         jLabel2.setText("Player 2");
 
         jButton1.setText("Start");
@@ -257,15 +250,10 @@ public class GameWindow extends javax.swing.JFrame {
             }
         });
 
+        jLabel3.setFont(new java.awt.Font("Monospaced", 0, 14)); // NOI18N
         jLabel3.setText("Chance");
 
-        jLabel4.setText("Player 1:");
-
-        jTextField4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField4ActionPerformed(evt);
-            }
-        });
+        jLabel4.setFont(new java.awt.Font("Monospaced", 1, 14)); // NOI18N
 
         jLabel5.setText("Enter Symbol");
 
@@ -278,13 +266,6 @@ public class GameWindow extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 99, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(title)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
@@ -300,26 +281,33 @@ public class GameWindow extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 64, Short.MAX_VALUE)
+                                .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGap(72, 72, 72))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
+                                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 99, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addComponent(title, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(title)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel4)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 244, Short.MAX_VALUE)
+                        .addComponent(jLabel4))
+                    .addComponent(title, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 246, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING))
@@ -346,41 +334,32 @@ public class GameWindow extends javax.swing.JFrame {
         // TODO add your handling code here:
          lock();
     }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField4ActionPerformed
    private void lock(){
         if(jTextField1.getText().equals(jTextField2.getText())){
-        JOptionPane.showMessageDialog(null, "Enter different names!!!!!");
-        sameName = true;
+            JOptionPane.showMessageDialog(null, "Enter different names!!!!!");
+            sameName = true;
         }
         else{
-        sameName = false;
+            sameName = false;
         }
         if(jTextField3.getText().equals(jTextField4.getText())){
-        JOptionPane.showMessageDialog(null, "Enter different symbol!!!!!");
-        sameSymbol = true;
+            JOptionPane.showMessageDialog(null, "Enter different symbol!!!!!");
+            sameSymbol = true;
         }
         else{
-        sameSymbol = false;
+            sameSymbol = false;
         }
-        /*
-        System.out.println(!sameSymbol&&!sameName);
-        System.out.println(sameName);
-        System.out.println(sameSymbol);
-        */
         //Check for exceptions in names and Symbol
         if(!sameSymbol&&!sameName){
-        jTextField1.setEnabled(false);
-        jTextField2.setEnabled(false);
-        jTextField3.setEnabled(false);
-        jTextField4.setEnabled(false);
-        p1Symbol=jTextField3.getText();
-        p2Symbol=jTextField4.getText();
-        p1Name=jTextField1.getText();
-        p2Name=jTextField2.getText();
-        jButton1.setText("Play");
+            jTextField1.setEnabled(false);
+            jTextField2.setEnabled(false);
+            jTextField3.setEnabled(false);
+            jTextField4.setEnabled(false);
+            p1Symbol=jTextField3.getText();
+            p2Symbol=jTextField4.getText();
+            p1Name=jTextField1.getText();
+            p2Name=jTextField2.getText();
+            jButton1.setText("Play");
         }
     }
     /**
