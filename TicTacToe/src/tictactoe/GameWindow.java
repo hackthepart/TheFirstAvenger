@@ -26,7 +26,7 @@ public class GameWindow extends javax.swing.JFrame {
     private JLabel playingLabels[][] = new JLabel[3][3];
     private final int PLAYINGAREAX = 110, PLAYINGAREAY = 100, CELLSIZE = 40, SPACEBETWEENCELLS = 10;
     private int currentPlayer = 0;
-    int moved[][]=new int[3][3];
+    boolean moved[][]=new boolean[3][3];
     String name1,name2;
     boolean play=false;
     String symbol_p1="O";
@@ -35,7 +35,7 @@ public class GameWindow extends javax.swing.JFrame {
         for(int i = 0; i < 3; i++){
             for(int j = 0; j < 3; j++){
                 playingLabels[i][j].setText(".");
-                moved[i][j]=0;
+                moved[i][j]=false;
             }
         } 
         nextButton.setVisible(true);
@@ -43,7 +43,7 @@ public class GameWindow extends javax.swing.JFrame {
         startButton.setEnabled(true);
         playerLabel.setText("Player 1 Name :");
         chanceLabel.setText("");
-        nameTextfield.setText("");
+        nameTextfield.setText(name1);
         nameTextfield.setEditable(true);
         currentPlayer = 0;
         play=false;
@@ -76,12 +76,12 @@ public class GameWindow extends javax.swing.JFrame {
         for(int i=0;i<3;i++)
         {
             for(int j=0;j<3;j++)
-                if(moved[i][j]==0)
+                if(!moved[i][j])
                 {
                     draw=false;
                 }
         }
-        if(draw==true)
+        if(draw)
         {
             endGame(2);
             return true;
@@ -141,7 +141,7 @@ public class GameWindow extends javax.swing.JFrame {
         JLabel currentCell = (JLabel) evt.getComponent();
         int x = currentCell.getX()/(CELLSIZE+SPACEBETWEENCELLS);
         int y = currentCell.getY()/(CELLSIZE+SPACEBETWEENCELLS);
-        if(moved[x][y]==0&&play==true)
+        if(!moved[x][y]&&play)
         {
             if(currentPlayer == 0){
                 currentCell.setText(symbol_p1);
@@ -154,9 +154,9 @@ public class GameWindow extends javax.swing.JFrame {
             }
             currentPlayer = (currentPlayer + 1) % 2;
             check( (currentPlayer + 1) % 2 );
-            moved[x][y]=1;
+            moved[x][y]=true;
         }
-        else if(moved[x][y]==1&&play==true)
+        else if(moved[x][y]&&play)
         {
             if(!checkdraw())
             {
@@ -233,11 +233,6 @@ public class GameWindow extends javax.swing.JFrame {
         playerLabel.setText("Player 1 Name :");
 
         nameTextfield.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        nameTextfield.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                nameTextfieldActionPerformed(evt);
-            }
-        });
 
         nextButton.setText("Next");
         nextButton.addActionListener(new java.awt.event.ActionListener() {
@@ -323,65 +318,62 @@ public class GameWindow extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 201, Short.MAX_VALUE)
                 .addComponent(chanceLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(23, 23, 23)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(p1Field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(p1Label)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(p2Label)
                         .addComponent(p2Field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(changeButton)))
+                        .addComponent(changeButton))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(p1Field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(p1Label)))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void nameTextfieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameTextfieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_nameTextfieldActionPerformed
-
     private void nextButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextButtonActionPerformed
-    if(!nameTextfield.getText().equals(""))
-    {
-        name1 = nameTextfield.getText();
-        startButton.setLocation(nextButton.getX(), nextButton.getY());
-        nextButton.setVisible(false);
-        startButton.setVisible(true);
-        nameTextfield.setText("");
-        playerLabel.setText("Player 2 Name :");
-        p1Label.setText(name1);
-    }
-    else
-    {
-        JOptionPane.showMessageDialog(null,"Please choose a valid name.");
-    }
-    }//GEN-LAST:event_nextButtonActionPerformed
-
-    private void startButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startButtonActionPerformed
-    if(!nameTextfield.getText().equals(""))
-    {   
-        if(!name1.equals(nameTextfield.getText()))
+        if(!nameTextfield.getText().equals(""))
         {
-            nameTextfield.setEditable(false);
-            name2 = nameTextfield.getText();
-            System.out.println(name1+name2);
-            chanceLabel.setText(name1+"'s CHANCE");
-            startButton.setEnabled(false);
-            play=true;
-            p2Label.setText(name2);
-            p1Field.setEditable(false);
-            p2Field.setEditable(false);
-            changeButton.setEnabled(false);
+            name1 = nameTextfield.getText();
+            startButton.setLocation(nextButton.getX(), nextButton.getY());
+            nextButton.setVisible(false);
+            startButton.setVisible(true);
+            nameTextfield.setText("");
+            playerLabel.setText("Player 2 Name :");
+            p1Label.setText(name1);
         }
         else
         {
-            JOptionPane.showMessageDialog(null,"Please choose different name.");
+            JOptionPane.showMessageDialog(null,"Please choose a valid name.");
         }
-    }
-    else
-    {
-        JOptionPane.showMessageDialog(null,"Please choose a valid name.");
-    }
+    }//GEN-LAST:event_nextButtonActionPerformed
+
+    private void startButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startButtonActionPerformed
+        if(!nameTextfield.getText().equals(""))
+        {   
+            if(!name1.equals(nameTextfield.getText()))
+            {
+                nameTextfield.setEditable(false);
+                name2 = nameTextfield.getText();
+                System.out.println(name1+name2);
+                chanceLabel.setText(name1+"'s CHANCE");
+                startButton.setEnabled(false);
+                play=true;
+                p2Label.setText(name2);
+                p1Field.setEditable(false);
+                p2Field.setEditable(false);
+                changeButton.setEnabled(false);
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null,"Please choose different name.");
+            }
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(null,"Please choose a valid name.");
+        }
     }//GEN-LAST:event_startButtonActionPerformed
 
     private void changeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeButtonActionPerformed
