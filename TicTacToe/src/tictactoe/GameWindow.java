@@ -59,14 +59,34 @@ public class GameWindow extends javax.swing.JFrame {
     private void endGame(int currentPlayer){
         if(currentPlayer==0)
             JOptionPane.showMessageDialog(null, name1 + " Wins !!!");
-        else
+        else if(currentPlayer==1)
             JOptionPane.showMessageDialog(null, name2 + " Wins !!!");
+        else 
+            JOptionPane.showMessageDialog(null, "This game is Draw.");
         int playAgainOrNot = JOptionPane.showConfirmDialog(null, "Want to play again???", "Continue?", 0);
         if(playAgainOrNot == JOptionPane.YES_OPTION)
             reset();
         else 
             dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
         
+    }
+    
+    private boolean checkdraw(){
+        boolean draw=true;
+        for(int i=0;i<3;i++)
+        {
+            for(int j=0;j<3;j++)
+                if(moved[i][j]==0)
+                {
+                    draw=false;
+                }
+        }
+        if(draw==true)
+        {
+            endGame(2);
+            return true;
+        }
+        return false;
     }
     
     private void check(int currentPlayer){
@@ -113,8 +133,8 @@ public class GameWindow extends javax.swing.JFrame {
             isGameOver = true;
         
         if(isGameOver)
-            endGame(currentPlayer);
-        
+            endGame(currentPlayer); 
+        checkdraw();
     }
     
     private void cellClicked(MouseEvent evt){
@@ -138,7 +158,10 @@ public class GameWindow extends javax.swing.JFrame {
         }
         else if(moved[x][y]==1&&play==true)
         {
-            JOptionPane.showMessageDialog(null, "Choose another spot!!!");
+            if(!checkdraw())
+            {
+                JOptionPane.showMessageDialog(null, "Choose another spot!!!");
+            }
         }
         else
         {
