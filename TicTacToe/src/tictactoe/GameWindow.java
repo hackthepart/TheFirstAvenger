@@ -10,6 +10,7 @@ import java.awt.event.MouseListener;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import javax.swing.JOptionPane;
@@ -25,7 +26,10 @@ public class GameWindow extends javax.swing.JFrame {
      */
     private JLabel playingLabels[][] = new JLabel[3][3];
     private final int PLAYINGAREAX = 110, PLAYINGAREAY = 100, CELLSIZE = 40, SPACEBETWEENCELLS = 10;
-    private int currentPlayer = 0;
+    private int currentPlayer = 0,moves;
+    private String p1Symbol = "O", p2Symbol = "X",p1Name,p2Name;
+    private boolean sameName = true;
+    private boolean sameSymbol = true;
     
     private void reset(){
         for(int i = 0; i < 3; i++){
@@ -34,22 +38,41 @@ public class GameWindow extends javax.swing.JFrame {
             }
         }
         currentPlayer = 0;
+        int changeName = JOptionPane.showConfirmDialog(null, "Want to change names and symbol???", "Continue?", 0);
+        if(changeName == JOptionPane.YES_OPTION){
+            jTextField1.setEnabled(true);
+            jTextField2.setEnabled(true);
+            jTextField3.setEnabled(true);
+            jTextField4.setEnabled(true);
+        }
     }
 
     private void endGame(int currentPlayer){
-        JOptionPane.showMessageDialog(null, "Player " + (currentPlayer + 1) + " Wins !!!");
+        if(currentPlayer == 747){
+            JOptionPane.showMessageDialog(null, "Draw :)");  
+            moves = 9;
+        }
+        else{
+            String tempName;
+            if(currentPlayer == 0){
+            tempName = p1Name;
+            }
+            else{
+            tempName = p2Name;
+            }
+            JOptionPane.showMessageDialog(null, "Player " + (currentPlayer + 1) + " (" + tempName + ") " + " Wins !!!");
+        }
         int playAgainOrNot = JOptionPane.showConfirmDialog(null, "Want to play again???", "Continue?", 0);
         if(playAgainOrNot == JOptionPane.YES_OPTION)
             reset();
         else 
             dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
-        
     }
     
     private void check(int currentPlayer){
-        String currentPlayerMove = "O";
+        String currentPlayerMove = p1Symbol;
         if(currentPlayer == 1)
-            currentPlayerMove = "X";
+            currentPlayerMove = p2Symbol;
         boolean isGameOver = false, flag;
 
         // checking horizontal match
@@ -89,21 +112,51 @@ public class GameWindow extends javax.swing.JFrame {
         if(flag)
             isGameOver = true;
         
-        if(isGameOver)
+        //check draw
+        moves=0;
+        for(int i=0;i<3;i++){
+            for(int j=0;j<3;j++){
+                if(playingLabels[i][j].getText().equals(".")){
+                    moves++;
+                }
+            }
+        }
+        //for draw
+        if(moves == 0 && isGameOver != true){
+        endGame(747);
+        }
+        //for any player win
+        else if(isGameOver)
             endGame(currentPlayer);
         
     }
     
     private void cellClicked(MouseEvent evt){
+        if(isFieldNotEmpty()){
+            if(checkNameandSymbol()){
+                lock();
+            }
+            else
+                return;
+        }
+        else
+            return;
         JLabel currentCell = (JLabel) evt.getComponent();
-        if(currentPlayer == 0){
-            currentCell.setText("O");
+        if(currentCell.getText().equals(".")){        //if cell text is "." than player can own that cell.
+            if(currentPlayer == 0){
+                currentCell.setText(p1Symbol);
+                jLabel4.setText(p2Name);
+            }
+            else{
+                currentCell.setText(p2Symbol);
+                jLabel4.setText(p1Name);
+            }
+            currentPlayer = (currentPlayer + 1) % 2;
+            check( (currentPlayer + 1) % 2 );
         }
         else{
-            currentCell.setText("X");
+            JOptionPane.showMessageDialog(null, "Not an empty place!!!");
         }
-        currentPlayer = (currentPlayer + 1) % 2;
-        check( (currentPlayer + 1) % 2 );
     }
     
     private void addPlayingComponents(JPanel playingArea){
@@ -115,8 +168,7 @@ public class GameWindow extends javax.swing.JFrame {
                 playingLabels[i][j].setVisible(true);
                 playingLabels[i][j].setLocation(i * (CELLSIZE + SPACEBETWEENCELLS), j * (CELLSIZE + SPACEBETWEENCELLS));
                 playingLabels[i][j].setSize(CELLSIZE, CELLSIZE);
-                playingArea.add(playingLabels[i][j]);
-                
+                playingArea.add(playingLabels[i][j]);    
                 playingLabels[i][j].addMouseListener(new MouseAdapter() {
                     public void mouseClicked(MouseEvent evt){
                         cellClicked(evt);
@@ -150,32 +202,176 @@ public class GameWindow extends javax.swing.JFrame {
     private void initComponents() {
 
         title = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
+        jTextField2 = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jTextField3 = new javax.swing.JTextField();
+        jTextField4 = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         title.setFont(new java.awt.Font("Ubuntu", 1, 24)); // NOI18N
         title.setText("TIC TAC TOE");
 
+        jLabel1.setFont(new java.awt.Font("Tahoma", 3, 11)); // NOI18N
+        jLabel1.setText("Player 1");
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 3, 11)); // NOI18N
+        jLabel2.setText("Player 2");
+
+        jButton1.setText("Start");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setFont(new java.awt.Font("Monospaced", 0, 14)); // NOI18N
+        jLabel3.setText("Chance");
+
+        jLabel4.setFont(new java.awt.Font("Monospaced", 1, 14)); // NOI18N
+
+        jLabel5.setText("Enter Symbol");
+
+        jLabel6.setText("Name");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(119, 119, 119)
-                .addComponent(title)
-                .addContainerGap(108, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel6)
+                                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(72, 72, 72))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 99, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addComponent(title, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(title)
-                .addContainerGap(323, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel4))
+                    .addComponent(title, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 246, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2)))
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        if(isFieldNotEmpty())
+            if(checkNameandSymbol());
+                lock();
+    }//GEN-LAST:event_jButton1ActionPerformed
+   private void lock(){
+        //Check for exceptions in names and Symbol
+        if(!sameSymbol&&!sameName){
+            jTextField1.setEnabled(false);
+            jTextField2.setEnabled(false);
+            jTextField3.setEnabled(false);
+            jTextField4.setEnabled(false);
+            p1Symbol=jTextField3.getText();
+            p2Symbol=jTextField4.getText();
+            p1Name=jTextField1.getText();
+            p2Name=jTextField2.getText();
+            jButton1.setText("Play");
+        }
+    }
+   
+   private boolean checkNameandSymbol(){
+       //check for different names and symbols. If different returns true else false.
+        if(jTextField1.getText().equals(jTextField2.getText())){
+            JOptionPane.showMessageDialog(null, "Enter different names!!!!!");
+            sameName = true;
+        }
+        else{
+            sameName = false;
+        }
+        if(jTextField3.getText().equals(jTextField4.getText())){
+            JOptionPane.showMessageDialog(null, "Enter different symbol!!!!!");
+            sameSymbol = true;
+        }
+        else{
+            sameSymbol = false;
+        }
+        return !sameSymbol&&!sameName;
+   }
+   
+   private boolean isFieldNotEmpty(){
+           //checking conditions for start playing without pressing button
+        if(jTextField1.getText().equals("")){
+            JOptionPane.showMessageDialog(null, "Enter Player 1 Name!!");
+            return false;    
+        }
+        if(jTextField2.getText().equals("")){
+            JOptionPane.showMessageDialog(null, "Enter Player 2 Name!!");
+            return false;    
+        }
+        if(jTextField3.getText().equals("")){
+            JOptionPane.showMessageDialog(null, "Enter Player 1 Symbol!!");
+            return false;    
+        }
+        if(jTextField4.getText().equals("")){
+            JOptionPane.showMessageDialog(null, "Enter Player 2 Symbol!!");
+            return false;    
+        }
+        return true;
+   }
     /**
      * @param args the command line arguments
      */
@@ -212,6 +408,17 @@ public class GameWindow extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField jTextField3;
+    private javax.swing.JTextField jTextField4;
     private javax.swing.JLabel title;
     // End of variables declaration//GEN-END:variables
 }
