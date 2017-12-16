@@ -119,8 +119,8 @@ public class GameWindow extends javax.swing.JFrame {
     
     private void cellClicked(MouseEvent evt){
         JLabel currentCell = (JLabel) evt.getComponent();
-        int x = currentCell.getX()/50;
-        int y = currentCell.getY()/50;
+        int x = currentCell.getX()/(CELLSIZE+SPACEBETWEENCELLS);
+        int y = currentCell.getY()/(CELLSIZE+SPACEBETWEENCELLS);
         if(moved[x][y]==0&&play==true)
         {
             if(currentPlayer == 0){
@@ -134,7 +134,15 @@ public class GameWindow extends javax.swing.JFrame {
             }
             currentPlayer = (currentPlayer + 1) % 2;
             check( (currentPlayer + 1) % 2 );
-        moved[x][y]=1;
+            moved[x][y]=1;
+        }
+        else if(moved[x][y]==1&&play==true)
+        {
+            JOptionPane.showMessageDialog(null, "Choose another spot!!!");
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(null, "Please Enter names first.");
         }
     }
     
@@ -338,8 +346,16 @@ public class GameWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_startButtonActionPerformed
 
     private void changeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeButtonActionPerformed
-        symbol_p1=p1Field.getText();
-        symbol_p2=p2Field.getText();
+        if(!p1Field.getText().equals(p2Field.getText()))
+        {
+            System.out.println(p1Field.getText().equals(p2Field.getText()));
+            symbol_p1=p1Field.getText();
+            symbol_p2=p2Field.getText();
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(null,"Please choose different symbols.");
+        }
     }//GEN-LAST:event_changeButtonActionPerformed
 
     /**
