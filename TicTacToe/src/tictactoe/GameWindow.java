@@ -145,12 +145,12 @@ public class GameWindow extends javax.swing.JFrame {
         {
             if(currentPlayer == 0){
                 currentCell.setText(symbol_p1);
-                chanceLabel.setText(name2+" CHANCE");
+                chanceLabel.setText(name2+"'s CHANCE");
 
             }
             else{
                 currentCell.setText(symbol_p2);
-                chanceLabel.setText(name1+" CHANCE");
+                chanceLabel.setText(name1+"'s CHANCE");
             }
             currentPlayer = (currentPlayer + 1) % 2;
             check( (currentPlayer + 1) % 2 );
@@ -345,39 +345,70 @@ public class GameWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_nameTextfieldActionPerformed
 
     private void nextButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextButtonActionPerformed
-    name1 = nameTextfield.getText();
-    startButton.setLocation(nextButton.getX(), nextButton.getY());
-    nextButton.setVisible(false);
-    startButton.setVisible(true);
-    nameTextfield.setText("");
-    playerLabel.setText("Player 2 Name :");
-    p1Label.setText(name1);
-    
+    if(!nameTextfield.getText().equals(""))
+    {
+        name1 = nameTextfield.getText();
+        startButton.setLocation(nextButton.getX(), nextButton.getY());
+        nextButton.setVisible(false);
+        startButton.setVisible(true);
+        nameTextfield.setText("");
+        playerLabel.setText("Player 2 Name :");
+        p1Label.setText(name1);
+    }
+    else
+    {
+        JOptionPane.showMessageDialog(null,"Please choose a valid name.");
+    }
     }//GEN-LAST:event_nextButtonActionPerformed
 
     private void startButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startButtonActionPerformed
-    nameTextfield.setEditable(false);
-    name2 = nameTextfield.getText();
-        System.out.println(name1+name2);
-        chanceLabel.setText(name1+" CHANCE");
-        startButton.setEnabled(false);
-        play=true;
-        p2Label.setText(name2);
-        p1Field.setEditable(false);
-        p2Field.setEditable(false);
-        changeButton.setEnabled(false);
-    }//GEN-LAST:event_startButtonActionPerformed
-
-    private void changeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeButtonActionPerformed
-        if(!p1Field.getText().equals(p2Field.getText()))
+    if(!nameTextfield.getText().equals(""))
+    {   
+        if(!name1.equals(nameTextfield.getText()))
         {
-            System.out.println(p1Field.getText().equals(p2Field.getText()));
-            symbol_p1=p1Field.getText();
-            symbol_p2=p2Field.getText();
+            nameTextfield.setEditable(false);
+            name2 = nameTextfield.getText();
+            System.out.println(name1+name2);
+            chanceLabel.setText(name1+"'s CHANCE");
+            startButton.setEnabled(false);
+            play=true;
+            p2Label.setText(name2);
+            p1Field.setEditable(false);
+            p2Field.setEditable(false);
+            changeButton.setEnabled(false);
         }
         else
         {
-            JOptionPane.showMessageDialog(null,"Please choose different symbols.");
+            JOptionPane.showMessageDialog(null,"Please choose different name.");
+        }
+    }
+    else
+    {
+        JOptionPane.showMessageDialog(null,"Please choose a valid name.");
+    }
+    }//GEN-LAST:event_startButtonActionPerformed
+
+    private void changeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeButtonActionPerformed
+        if(p1Field.getText().equals(""))
+        {
+            JOptionPane.showMessageDialog(null,"Please choose a valid symbol for player 1.");
+        }
+        else if(p2Field.getText().equals(""))
+        {
+            JOptionPane.showMessageDialog(null,"Please choose a valid symbol for player 2.");
+        }
+        else
+        {
+            if(!p1Field.getText().equals(p2Field.getText()))
+            {
+                System.out.println(p1Field.getText().equals(p2Field.getText()));
+                symbol_p1=p1Field.getText();
+                symbol_p2=p2Field.getText();
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null,"Please choose different symbols.");
+            }
         }
     }//GEN-LAST:event_changeButtonActionPerformed
 
