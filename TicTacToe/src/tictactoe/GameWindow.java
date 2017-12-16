@@ -32,16 +32,17 @@ public class GameWindow extends javax.swing.JFrame {
      */
     private JLabel playingLabels[][] = new JLabel[3][3];
     private final int PLAYINGAREAX = 110, PLAYINGAREAY = 100, CELLSIZE = 40, SPACEBETWEENCELLS = 10;
-    private int currentPlayer = 0;
+    private int currentPlayer;
     private boolean isServerBoolean = true;
     private final int port = 747;
-    private String playerName,opponentName;
+    private String playerName,playerSymbol,opponentName,opponentSymbol;
+    public int message = 0;
     JPanel playingArea = new JPanel();
     ServerSocket serverSocket;
     Socket _serverSocket,_clientSocket;
-    Scanner serverGetNameOfClient,clientGetNameOfServer;
-    PrintStream clientSendName,serverSendName;
-    
+    Scanner serverGetNameOfClient,clientGetNameOfServer,serverScan,clientScan;
+    PrintStream clientSendName,serverSendName,serverSendMove,clientSendMove;
+    private int arr[][] = {{1,1,1},{1,1,1},{1,1,1}};
     private void reset(){
         for(int i = 0; i < 3; i++){
             for(int j = 0; j < 3; j++){
@@ -62,9 +63,9 @@ public class GameWindow extends javax.swing.JFrame {
     }
     
     private void check(int currentPlayer){
-        String currentPlayerMove = "O";
+        String currentPlayerMove = playerSymbol;
         if(currentPlayer == 1)
-            currentPlayerMove = "X";
+            currentPlayerMove = opponentSymbol;
         boolean isGameOver = false, flag;
 
         // checking horizontal match
@@ -111,7 +112,64 @@ public class GameWindow extends javax.swing.JFrame {
     
     private void cellClicked(MouseEvent evt){
         JLabel currentCell = (JLabel) evt.getComponent();
-        if(currentPlayer == 0){
+        if(currentCell.getText().equals(".")){
+            if(isServerBoolean){
+                if(currentPlayer == 0){
+                    arr[currentCell.getX()/(CELLSIZE + SPACEBETWEENCELLS)][currentCell.getY()/(CELLSIZE + SPACEBETWEENCELLS)] = 2;
+                    message = 0;
+                    code(message);
+                    try {
+                        serverSendMove = new PrintStream(_serverSocket.getOutputStream());
+                        serverSendMove.println(message);
+                    } catch (IOException ex) {
+                        Logger.getLogger(GameWindow.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    serverSendMove.close();
+                }
+                else{
+                    try {
+                        serverScan = new Scanner(_serverSocket.getInputStream());
+                        message = serverScan.nextInt();
+                    } catch (IOException ex) {
+                        Logger.getLogger(GameWindow.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    decode(message);
+                    serverScan.close();
+                }
+            }
+            else{
+                if(currentPlayer == 0){
+                    arr[currentCell.getX()/(CELLSIZE + SPACEBETWEENCELLS)][currentCell.getY()/(CELLSIZE + SPACEBETWEENCELLS)] = 3;
+                    message = 0;
+                    code(message);
+                    try {
+                        clientSendMove = new PrintStream(_clientSocket.getOutputStream());
+                        clientSendMove.println(message);
+                    } catch (IOException ex) {
+                        Logger.getLogger(GameWindow.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    clientSendMove.close();
+                }
+                else{
+                    try {
+                        clientScan = new Scanner(_clientSocket.getInputStream());
+                        message = clientScan.nextInt();
+                    } catch (IOException ex) {
+                        Logger.getLogger(GameWindow.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    decode(message);
+                    clientScan.close();
+                }
+            }
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "Place is already occupied");
+            return ;
+        }
+        print();
+        currentPlayer = (currentPlayer + 1) % 2;
+        check( (currentPlayer + 1) % 2 );
+        /*if(currentPlayer == 0){
             currentCell.setText("O");
         }
         else{
@@ -119,6 +177,93 @@ public class GameWindow extends javax.swing.JFrame {
         }
         currentPlayer = (currentPlayer + 1) % 2;
         check( (currentPlayer + 1) % 2 );
+        */
+        /*if(currentPlayer == 0){
+            if(isServerBoolean){
+                if(currentCell.getText().equals(".")){
+                    currentCell.setText(playerSymbol);
+                    arr[currentCell.getX()][currentCell.getY()] = 2;
+                    message = 0;
+                    code(message);
+                    serverSendMove.println(message);
+                }
+                else{
+                    JOptionPane.showMessageDialog(null, "Field already occupied!!!!");
+                    return;
+                }
+            }
+            else{
+                message = clientScan.nextInt();
+                decode(message);   
+                print();
+            }
+        }
+        else{
+            if(isServerBoolean){
+                message = serverScan.nextInt();
+                decode(message);   
+                print();
+            }
+            else{
+                if(currentCell.getText().equals(".")){
+                    currentCell.setText(playerSymbol);
+                    arr[currentCell.getX()][currentCell.getY()] = 2;
+                    message = 0;
+                    code(message);
+                    clientSendMove.println(message);
+                }
+                else{
+                    JOptionPane.showMessageDialog(null, "Field already occupied!!!!");
+                    return;
+                }
+            }
+        }
+        currentPlayer = (currentPlayer + 1) % 2;
+        check( (currentPlayer + 1) % 2 );
+        */
+        /*
+        if(isServerBoolean){
+            if(currentPlayer == 0){
+                if(currentCell.getText().equals(".")){
+                    currentCell.setText(playerSymbol);
+                    arr[currentCell.getX()][currentCell.getY()] = 2;
+                    message = 0;
+                    code(message);
+                    serverSendMove.println(message);
+                }
+                else{
+                    JOptionPane.showMessageDialog(null, "Field already occupied!!!!");
+                    return;
+                }
+            }
+            else{
+                message = serverScan.nextInt();
+                decode(message);   
+                print();
+            }
+        }
+        else{
+            if(currentPlayer == 0){
+                if(currentCell.getText().equals(".")){
+                    currentCell.setText(playerSymbol);
+                    arr[currentCell.getX()][currentCell.getY()] = 1;
+                    message = 0;
+                    code(message);
+                    clientSendMove.println(message);
+                }
+                else{
+                    JOptionPane.showMessageDialog(null, "Field already occupied!!!!");
+                    return;
+                }
+            }
+            else{
+                message = clientScan.nextInt();
+                decode(message);   
+                print();
+            }
+        }
+        currentPlayer = (currentPlayer + 1) % 2;
+        check( (currentPlayer + 1) % 2 );*/
     }
     
     private void addPlayingComponents(JPanel playingArea){
@@ -298,21 +443,22 @@ public class GameWindow extends javax.swing.JFrame {
                        JOptionPane.showMessageDialog(null, "Enter IP");
                     }
                     else{
-                       assign();
                         try {
                             _clientSocket = new Socket(ipField.getText(),port);
                             clientSendName = new PrintStream(_clientSocket.getOutputStream());
                             clientSendName.println(nameField.getText());
                             clientGetNameOfServer = new Scanner(_clientSocket.getInputStream());
                             opponentName = clientGetNameOfServer.nextLine();
+                            clientSendName.println(symbolField.getText());
+                            opponentSymbol = clientGetNameOfServer.nextLine();
                             
+                            lockGUI(true);
                         } catch (IOException ex) {
                             Logger.getLogger(GameWindow.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
                 }
                 else{
-                    assign();
                     try {
                         serverSocket = new ServerSocket(port);
                         _serverSocket = serverSocket.accept();
@@ -320,11 +466,43 @@ public class GameWindow extends javax.swing.JFrame {
                         opponentName = serverGetNameOfClient.nextLine();
                         serverSendName = new PrintStream(_serverSocket.getOutputStream());
                         serverSendName.println(nameField.getText());
+                        opponentSymbol = serverGetNameOfClient.nextLine();
+                        if(symbolField.getText().equals(opponentSymbol)){
+                            if(opponentSymbol != "X")
+                                playerSymbol = "X";
+                            else
+                                playerSymbol = "Y";
+                            JOptionPane.showMessageDialog(null, "Your symbol match with opponent symbol");
+                        }else{
+                            playerSymbol = symbolField.getText();
+                            serverSendName.println(playerSymbol);
+                            playerName = nameField.getText();
+                        }
+                        lockGUI(true);
+                        serverGetNameOfClient.close();
+                        serverSendName.close();
                     } catch (IOException ex) {
                         Logger.getLogger(GameWindow.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             }
+        }
+        /*
+        initialised with scanner and printer objects
+        */
+        try {
+            clientSendMove = new PrintStream(_clientSocket.getOutputStream());
+            
+            
+            serverScan = new Scanner(_serverSocket.getInputStream());
+        } catch (IOException ex) {
+            Logger.getLogger(GameWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if(isServerBoolean){
+            currentPlayer = 0;
+        }
+        else{
+            currentPlayer = 1;
         }
     }//GEN-LAST:event_startButtonActionPerformed
 
@@ -340,19 +518,51 @@ public class GameWindow extends javax.swing.JFrame {
         ipField.setEnabled(true);
     }//GEN-LAST:event_isClientActionPerformed
 
-    public void assign(){
-        /*assign names . . .. . to string  now*/
-        playerName = nameField.getText();
-        playingArea.setVisible(true);
-        isServer.setVisible(false);
-        isClient.setVisible(false);
-        ipLabel.setVisible(false);
-        ipField.setVisible(false);
-        startButton.setVisible(false);
-        symbolLabel.setVisible(false);
-        nameLabel.setVisible(false);
-        symbolField.setVisible(false);
-        nameField.setVisible(false);
+    private int code(int message){
+        for(int i=0;i<3;i++){
+            for(int j=0;j<3;j++){
+                message = message * 10 + arr[i][j];
+            }
+        }
+        return message;
+    }
+    
+    private void decode(int message){
+        for(int i=2;i>=0;i--){
+            for(int j=2;j>=0;j--){
+                arr[i][j] = message % 10;
+                message /= 10;
+            }
+        }
+    }
+    
+    private void print(){
+        for(int i=0;i<3;i++){
+            for(int j=0;j<3;j++){
+                if(arr[i][j]==1){
+                    playingLabels[i][j].setText(".");
+                }
+                else if(arr[i][j]==2){
+                    playingLabels[i][j].setText(playerSymbol);
+                }
+                else{
+                    playingLabels[i][j].setText(opponentSymbol);
+                }
+            }
+        }
+    }
+    
+    public void lockGUI(boolean condition){
+        playingArea.setVisible(condition);
+        isServer.setVisible(!condition);
+        isClient.setVisible(!condition);
+        ipLabel.setVisible(!condition);
+        ipField.setVisible(!condition);
+        startButton.setVisible(!condition);
+        symbolLabel.setVisible(!condition);
+        nameLabel.setVisible(!condition);
+        symbolField.setVisible(!condition);
+        nameField.setVisible(!condition);
     }
     
     /**
