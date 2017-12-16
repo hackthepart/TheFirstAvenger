@@ -29,6 +29,8 @@ public class GameWindow extends javax.swing.JFrame {
     int moved[][]=new int[3][3];
     String name1,name2;
     boolean play=false;
+    String symbol_p1="O";
+    String symbol_p2="X";
     private void reset(){
         for(int i = 0; i < 3; i++){
             for(int j = 0; j < 3; j++){
@@ -45,6 +47,13 @@ public class GameWindow extends javax.swing.JFrame {
         nameTextfield.setEditable(true);
         currentPlayer = 0;
         play=false;
+        changeButton.setEnabled(true);
+        p1Field.setText("O");
+        p2Field.setText("X");
+        p1Label.setText(name1);
+        p2Label.setText(name2);
+        p1Field.setEditable(true);
+        p2Field.setEditable(true);
     }
 
     private void endGame(int currentPlayer){
@@ -61,9 +70,9 @@ public class GameWindow extends javax.swing.JFrame {
     }
     
     private void check(int currentPlayer){
-        String currentPlayerMove = "O";
+        String currentPlayerMove = symbol_p1;
         if(currentPlayer == 1)
-            currentPlayerMove = "X";
+            currentPlayerMove = symbol_p2;
         boolean isGameOver = false, flag;
 
         // checking horizontal match
@@ -115,12 +124,12 @@ public class GameWindow extends javax.swing.JFrame {
         if(moved[x][y]==0&&play==true)
         {
             if(currentPlayer == 0){
-                currentCell.setText("O");
+                currentCell.setText(symbol_p1);
                 chanceLabel.setText(name2+" CHANCE");
 
             }
             else{
-                currentCell.setText("X");
+                currentCell.setText(symbol_p2);
                 chanceLabel.setText(name1+" CHANCE");
             }
             currentPlayer = (currentPlayer + 1) % 2;
@@ -178,6 +187,11 @@ public class GameWindow extends javax.swing.JFrame {
         nextButton = new javax.swing.JButton();
         startButton = new javax.swing.JButton();
         chanceLabel = new javax.swing.JLabel();
+        p1Label = new javax.swing.JLabel();
+        p2Label = new javax.swing.JLabel();
+        p1Field = new javax.swing.JTextField();
+        p2Field = new javax.swing.JTextField();
+        changeButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -208,6 +222,21 @@ public class GameWindow extends javax.swing.JFrame {
             }
         });
 
+        p1Label.setText("Player 1:");
+
+        p2Label.setText("Player 2:");
+
+        p1Field.setText("O");
+
+        p2Field.setText("X");
+
+        changeButton.setText("Change");
+        changeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                changeButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -226,14 +255,29 @@ public class GameWindow extends javax.swing.JFrame {
                             .addComponent(chanceLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
                             .addComponent(nameTextfield, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(startButton, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(nextButton, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(startButton, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(nextButton, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(p1Label)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(p1Field, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(p2Label)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(p2Field, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(changeButton))
+                                .addContainerGap())))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(title)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -242,9 +286,22 @@ public class GameWindow extends javax.swing.JFrame {
                     .addComponent(nameTextfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(nextButton)
                     .addComponent(startButton))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 247, Short.MAX_VALUE)
-                .addComponent(chanceLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 204, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(chanceLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(p1Field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(p1Label))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(p2Label)
+                            .addComponent(p2Field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(changeButton)
+                        .addGap(8, 8, 8))))
         );
 
         chanceLabel.getAccessibleContext().setAccessibleName("");
@@ -263,6 +320,7 @@ public class GameWindow extends javax.swing.JFrame {
     startButton.setVisible(true);
     nameTextfield.setText("");
     playerLabel.setText("Player 2 Name :");
+    p1Label.setText(name1);
     
     }//GEN-LAST:event_nextButtonActionPerformed
 
@@ -273,7 +331,16 @@ public class GameWindow extends javax.swing.JFrame {
         chanceLabel.setText(name1+" CHANCE");
         startButton.setEnabled(false);
         play=true;
+        p2Label.setText(name2);
+        p1Field.setEditable(false);
+        p2Field.setEditable(false);
+        changeButton.setEnabled(false);
     }//GEN-LAST:event_startButtonActionPerformed
+
+    private void changeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeButtonActionPerformed
+        symbol_p1=p1Field.getText();
+        symbol_p2=p2Field.getText();
+    }//GEN-LAST:event_changeButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -312,8 +379,13 @@ public class GameWindow extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel chanceLabel;
+    private javax.swing.JButton changeButton;
     private javax.swing.JTextField nameTextfield;
     private javax.swing.JButton nextButton;
+    private javax.swing.JTextField p1Field;
+    private javax.swing.JLabel p1Label;
+    private javax.swing.JTextField p2Field;
+    private javax.swing.JLabel p2Label;
     private javax.swing.JLabel playerLabel;
     private javax.swing.JButton startButton;
     private javax.swing.JLabel title;
