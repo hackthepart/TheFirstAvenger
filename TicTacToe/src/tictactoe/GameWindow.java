@@ -53,14 +53,14 @@ public class GameWindow extends javax.swing.JFrame {
             moves = 9;
         }
         else{
-            String temp;
+            String tempName;
             if(currentPlayer == 0){
-            temp = p1Name;
+            tempName = p1Name;
             }
             else{
-            temp = p2Name;
+            tempName = p2Name;
             }
-            JOptionPane.showMessageDialog(null, "Player " + (currentPlayer + 1) + "(" + temp + ")" + " Wins !!!");
+            JOptionPane.showMessageDialog(null, "Player " + (currentPlayer + 1) + " (" + tempName + ") " + " Wins !!!");
         }
         int playAgainOrNot = JOptionPane.showConfirmDialog(null, "Want to play again???", "Continue?", 0);
         if(playAgainOrNot == JOptionPane.YES_OPTION)
@@ -132,35 +132,17 @@ public class GameWindow extends javax.swing.JFrame {
     }
     
     private void cellClicked(MouseEvent evt){
-        //checking conditions for start playing without pressing button
-        if(jTextField1.getText().equals("")){
-            JOptionPane.showMessageDialog(null, "Enter Player 1 Name!!");
-            return;    
+        if(isFieldNotEmpty()){
+            if(checkNameandSymbol()){
+                lock();
+            }
+            else
+                return;
         }
-        if(jTextField2.getText().equals("")){
-            JOptionPane.showMessageDialog(null, "Enter Player 2 Name!!");
-            return;    
-        }
-        if(jTextField3.getText().equals("")){
-            JOptionPane.showMessageDialog(null, "Enter Player 1 Symbol!!");
-            return;    
-        }
-        if(jTextField4.getText().equals("")){
-            JOptionPane.showMessageDialog(null, "Enter Player 2 Symbol!!");
-            return;    
-        }
-        if(sameName){
-            JOptionPane.showMessageDialog(null, "Enter different names!!!!!");
+        else
             return;
-        }
-        if(sameSymbol){
-            JOptionPane.showMessageDialog(null, "Enter different Symbol!!!!!");
-            return;
-        }
-        lock();
         JLabel currentCell = (JLabel) evt.getComponent();
-        String temp = currentCell.getText();
-        if(temp == "."){
+        if(currentCell.getText().equals(".")){        //if cell text is "." than player can own that cell.
             if(currentPlayer == 0){
                 currentCell.setText(p1Symbol);
                 jLabel4.setText(p2Name);
@@ -332,9 +314,27 @@ public class GameWindow extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-         lock();
+        if(isFieldNotEmpty())
+            if(checkNameandSymbol());
+                lock();
     }//GEN-LAST:event_jButton1ActionPerformed
    private void lock(){
+        //Check for exceptions in names and Symbol
+        if(!sameSymbol&&!sameName){
+            jTextField1.setEnabled(false);
+            jTextField2.setEnabled(false);
+            jTextField3.setEnabled(false);
+            jTextField4.setEnabled(false);
+            p1Symbol=jTextField3.getText();
+            p2Symbol=jTextField4.getText();
+            p1Name=jTextField1.getText();
+            p2Name=jTextField2.getText();
+            jButton1.setText("Play");
+        }
+    }
+   
+   private boolean checkNameandSymbol(){
+       //check for different names and symbols. If different returns true else false.
         if(jTextField1.getText().equals(jTextField2.getText())){
             JOptionPane.showMessageDialog(null, "Enter different names!!!!!");
             sameName = true;
@@ -349,19 +349,29 @@ public class GameWindow extends javax.swing.JFrame {
         else{
             sameSymbol = false;
         }
-        //Check for exceptions in names and Symbol
-        if(!sameSymbol&&!sameName){
-            jTextField1.setEnabled(false);
-            jTextField2.setEnabled(false);
-            jTextField3.setEnabled(false);
-            jTextField4.setEnabled(false);
-            p1Symbol=jTextField3.getText();
-            p2Symbol=jTextField4.getText();
-            p1Name=jTextField1.getText();
-            p2Name=jTextField2.getText();
-            jButton1.setText("Play");
+        return !sameSymbol&&!sameName;
+   }
+   
+   private boolean isFieldNotEmpty(){
+           //checking conditions for start playing without pressing button
+        if(jTextField1.getText().equals("")){
+            JOptionPane.showMessageDialog(null, "Enter Player 1 Name!!");
+            return false;    
         }
-    }
+        if(jTextField2.getText().equals("")){
+            JOptionPane.showMessageDialog(null, "Enter Player 2 Name!!");
+            return false;    
+        }
+        if(jTextField3.getText().equals("")){
+            JOptionPane.showMessageDialog(null, "Enter Player 1 Symbol!!");
+            return false;    
+        }
+        if(jTextField4.getText().equals("")){
+            JOptionPane.showMessageDialog(null, "Enter Player 2 Symbol!!");
+            return false;    
+        }
+        return true;
+   }
     /**
      * @param args the command line arguments
      */
