@@ -132,9 +132,7 @@ public class GameWindow extends javax.swing.JFrame {
         }
         if(flag)
             isGameOver = true;
-        
-        if(flag)
-            isGameOver = true;
+    
         if(isGameOver)
             endGame(currentPlayer);
         
