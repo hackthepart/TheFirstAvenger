@@ -30,17 +30,19 @@ public class GameWindow extends javax.swing.JFrame {
     private String player1,player2;
     
     private void takeInputNames(){
-        int v=-1;
-        while(v!=0){
+        
+        //Loop will continue until user enters something
+        while(true){
         player1 = JOptionPane.showInputDialog("Player 1 Name: ");
         if(player1.length()>0)
-            v++;
+            break;
         }
-        v=-1;
-        while(v!=0){
+        
+        //Loop will continue until user enters a different name from previous
+        while(true){
         player2 = JOptionPane.showInputDialog("Player 2 Name: ");
-        if(player2.length()>0)
-            v++;
+        if(player2.length()>0&&!player2.equals(player1))
+            break;
         }
     }
     
@@ -49,13 +51,13 @@ public class GameWindow extends javax.swing.JFrame {
         options[0]="X";
         options[1]="O";
         int choice = JOptionPane.showOptionDialog(null, //Component parentComponent
-                               "Choose from X and O", //Object message,
-                               "Player 1 wants", //String title
-                               JOptionPane.YES_NO_OPTION, //int optionType
-                               JOptionPane.INFORMATION_MESSAGE, //int messageType
-                               null, //Icon icon,
-                               options, //Object[] options,
-                               "O");//Object initialValue 
+                        "Choose from X and O", //Object message,
+                        "Player 1 wants", //String title
+                         JOptionPane.YES_NO_OPTION, //int optionType
+                         JOptionPane.INFORMATION_MESSAGE, //int messageType
+                         null, //Icon icon,
+                         options, //Object[] options,
+                         "O");//Object initialValue 
         if(choice == 0 ){
            currentPlayer=1;
         }else{
@@ -78,7 +80,7 @@ public class GameWindow extends javax.swing.JFrame {
     private void endGame(int currentPlayer){
         if(currentPlayer==-1)
             JOptionPane.showMessageDialog(null,"Match Draws !!!");
-        else if(playerName.getText()==player1)
+        else if(playerName.getText().equals(player1))
             JOptionPane.showMessageDialog(null, player2 + " Wins !!!");
         else
             JOptionPane.showMessageDialog(null, player1 + " Wins !!!");
