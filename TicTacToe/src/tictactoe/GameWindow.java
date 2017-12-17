@@ -34,7 +34,10 @@ public class GameWindow extends javax.swing.JFrame {
     private JLabel playingLabels[][] = new JLabel[3][3];
     private final int PLAYINGAREAX = 150, PLAYINGAREAY = 100, CELLSIZE = 40, SPACEBETWEENCELLS = 10;
     private int currentPlayer = 0,port = 474;
+    int moves[][]=new int[3][3]; //0-empty 1-player 2-opponent
     boolean playing=false,connected=false;
+    int x,y;
+    
     String ip = "127.0.0.1";
     String player,opponent;
     String playerSymbol,opponentSymbol;
@@ -47,13 +50,21 @@ public class GameWindow extends javax.swing.JFrame {
         for(int i = 0; i < 3; i++){
             for(int j = 0; j < 3; j++){
                 playingLabels[i][j].setText(".");
+                moves[i][j]=0;
             }
         }
         currentPlayer = 0;
     }
 
     private void endGame(int currentPlayer){
-        JOptionPane.showMessageDialog(null, "Player " + (currentPlayer + 1) + " Wins !!!");
+        if(currentPlayer==0)
+        {
+            JOptionPane.showMessageDialog(null, "Player " + player + " Wins !!!");
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(null, "Player " + opponent + " Wins !!!");
+        }
         int playAgainOrNot = JOptionPane.showConfirmDialog(null, "Want to play again???", "Continue?", 0);
         if(playAgainOrNot == JOptionPane.YES_OPTION)
             reset();
@@ -62,10 +73,8 @@ public class GameWindow extends javax.swing.JFrame {
         
     }
     
-    private void check(int currentPlayer){
-        String currentPlayerMove = "O";
-        if(currentPlayer == 1)
-            currentPlayerMove = "X";
+    private boolean check(){
+        String currentPlayerMove = playerSymbol;
         boolean isGameOver = false, flag;
 
         // checking horizontal match
@@ -106,7 +115,8 @@ public class GameWindow extends javax.swing.JFrame {
             isGameOver = true;
         
         if(isGameOver)
-            endGame(currentPlayer);
+            return true;
+        return false;
         
     }
     
@@ -117,22 +127,50 @@ public class GameWindow extends javax.swing.JFrame {
         }
         else if(connected&&!playing)
         {
-            JOptionPane.showMessageDialog(null, "Wait for opponent turn");
+            JOptionPane.showMessageDialog(null, "Wait for opponent's turn");
         }
         else
         {
             JLabel currentCell = (JLabel) evt.getComponent();
-            if(currentPlayer == 0){
-                currentCell.setText("O");
+            int px = currentCell.getX()/(CELLSIZE+SPACEBETWEENCELLS);
+            int py = currentCell.getY()/(CELLSIZE+SPACEBETWEENCELLS);
+            if(moves[px][py]==0)
+            {
+                currentCell.setText(playerSymbol);
+                moves[px][py]=1;
+                playing=false;
+                if(!check())
+                {
+                    System.out.println("123");
+                    
+                    cPrintStream.println(px);System.out.println("px:"+px);
+                    cPrintStream.println(py);System.out.println("py:"+py);
+                    x=cScanner.nextInt();System.out.println("rx:"+x);
+                    y=cScanner.nextInt();System.out.println("ry:"+y);
+                    moves[x][y]=2;
+                    if(check())
+                    {
+                        endGame(1);
+                    }
+                }
+                else
+                {
+                    endGame(0);
+                }
+                playing=true;
             }
-            else{
-                currentCell.setText("X");
+            else
+            {
+                JOptionPane.showMessageDialog(null, "Choose another spot");
             }
-            currentPlayer = (currentPlayer + 1) % 2;
-            check( (currentPlayer + 1) % 2 );
         }
     }
     
+    private void playMove(int x,int y)
+    {
+        
+    }
+        
     private void addPlayingComponents(JPanel playingArea){
         for(int i = 0; i < 3; i++){
             for( int j = 0; j< 3 ; j++){
@@ -182,6 +220,10 @@ public class GameWindow extends javax.swing.JFrame {
         symbolTextField = new javax.swing.JTextField();
         actionButton = new javax.swing.JButton();
         ipTextField = new javax.swing.JTextField();
+        opponentLabel = new javax.swing.JLabel();
+        youLabel = new javax.swing.JLabel();
+        playerDisplay = new javax.swing.JLabel();
+        opponentDisplay = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -209,6 +251,10 @@ public class GameWindow extends javax.swing.JFrame {
         ipTextField.setText("IP Address");
         ipTextField.setEnabled(false);
 
+        opponentLabel.setText("Opponent:");
+
+        youLabel.setText("You:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -221,15 +267,27 @@ public class GameWindow extends javax.swing.JFrame {
                         .addComponent(title)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(cli_ser_ComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(nameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(ipTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(symbolTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(actionButton, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(youLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(playerDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(cli_ser_ComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(nameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(opponentLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(opponentDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(ipTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(symbolTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(actionButton, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addContainerGap())))
         );
         layout.setVerticalGroup(
@@ -244,7 +302,15 @@ public class GameWindow extends javax.swing.JFrame {
                     .addComponent(symbolTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(actionButton)
                     .addComponent(ipTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(294, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 227, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(youLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(playerDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(opponentLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(opponentDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
         pack();
@@ -270,6 +336,7 @@ public class GameWindow extends javax.swing.JFrame {
                     playerSymbol=symbolTextField.getText();
                     serSocket = new ServerSocket(port);
                     sSocket = serSocket.accept();
+                    sPrintStream = new PrintStream(sSocket.getOutputStream());
                     sScanner = new Scanner(sSocket.getInputStream());
                     opponent=sScanner.nextLine();
                     sPrintStream.println(player);
@@ -277,6 +344,8 @@ public class GameWindow extends javax.swing.JFrame {
                     sPrintStream.println(playerSymbol);
                     playing=true;
                     connected=true;
+                    playerDisplay.setText(player);
+                    opponentDisplay.setText(opponent);
                 } 
                 catch (IOException ex) 
                 {
@@ -326,9 +395,14 @@ public class GameWindow extends javax.swing.JFrame {
                         }
                         symbolTextField.setText(playerSymbol);
                     }
-                    playing=true;
+                    playing=false;
                     connected=true;
-                } 
+                    playerDisplay.setText(player);
+                    opponentDisplay.setText(opponent); 
+                    x=cScanner.nextInt();System.out.println("rx:"+x);
+                    y=cScanner.nextInt();System.out.println("ry:"+y);
+                    playing=true;
+                }
                 catch (IOException ex) 
                 {
                     Logger.getLogger(GameWindow.class.getName()).log(Level.SEVERE, null, ex);
@@ -348,6 +422,7 @@ public class GameWindow extends javax.swing.JFrame {
         else
         {
             ipTextField.setEnabled(true);
+            ipTextField.setText("127.0.0.1");
             symbolTextField.setText("X");
             actionButton.setText("Connect");            
         }
@@ -393,7 +468,11 @@ public class GameWindow extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cli_ser_ComboBox;
     private javax.swing.JTextField ipTextField;
     private javax.swing.JTextField nameTextField;
+    private javax.swing.JLabel opponentDisplay;
+    private javax.swing.JLabel opponentLabel;
+    private javax.swing.JLabel playerDisplay;
     private javax.swing.JTextField symbolTextField;
     private javax.swing.JLabel title;
+    private javax.swing.JLabel youLabel;
     // End of variables declaration//GEN-END:variables
 }
