@@ -21,24 +21,24 @@ public class GameWindow extends javax.swing.JFrame {
     private JLabel playingLabels[][] = new JLabel[3][3];
     private final int PLAYINGAREAX = 110, PLAYINGAREAY = 100, CELLSIZE = 40, SPACEBETWEENCELLS = 10;
     private int currentPlayer = 0;
-   private String name1, name2,val1,val2;
+   private String pl1name, pl2name,pl1symbol,pl2symbol;
     private void reset(){
        for(int i = 0; i < 3; i++){
             for(int j = 0; j < 3; j++){
                 playingLabels[i][j].setText(".");
             }
         }
-       name1 = JOptionPane.showInputDialog(null, "Player1 Name");
-       name2 = JOptionPane.showInputDialog(null, "Player2 Name");
+       pl1name = JOptionPane.showInputDialog(null, "Player1 Name");
+       pl2name = JOptionPane.showInputDialog(null, "Player2 Name");
         currentPlayer = 0;
     }
 
     private void endGame(int currentPlayer){
         jLabel2.setText("Game Over!");
         if(currentPlayer==0)
-             JOptionPane.showMessageDialog(null, name1 + " Wins !!!");
+             JOptionPane.showMessageDialog(null, pl1name + " Wins !!!");
         else
-            JOptionPane.showMessageDialog(null, name2 + " Wins !!!");
+            JOptionPane.showMessageDialog(null, pl2name + " Wins !!!");
         int playAgainOrNot = JOptionPane.showConfirmDialog(null, "Want to play again???", "Continue?", 0);
         if(playAgainOrNot == JOptionPane.YES_OPTION)
             reset();
@@ -48,13 +48,13 @@ public class GameWindow extends javax.swing.JFrame {
     }
     
     private void check(int currentPlayer){
-        String currentPlayerMove = val1;
+        String currentPlayerMove = pl1symbol;
         if(currentPlayer == 1){
-            currentPlayerMove = val2;
-            jLabel2.setText(name1);
+            currentPlayerMove = pl2symbol;
+            jLabel2.setText(pl1name);
         }
         else
-            jLabel2.setText(name2);
+            jLabel2.setText(pl2name);
         boolean isGameOver = false, flag;
 
         // checking horizontal match
@@ -102,25 +102,25 @@ public class GameWindow extends javax.swing.JFrame {
     private void cellClicked(MouseEvent evt){
         JLabel currentCell = (JLabel) evt.getComponent();
         if(currentPlayer == 0){
-            currentCell.setText(val1);
+            currentCell.setText(pl1symbol);
         }
         else{
-            currentCell.setText(val2);
+            currentCell.setText(pl2symbol);
         }
         currentPlayer = (currentPlayer + 1) % 2;
         check( (currentPlayer + 1) % 2 );
     }
     
     private void addPlayingComponents(JPanel playingArea){
-        name1 = JOptionPane.showInputDialog(null, "Player1 Name");
-        val1 = JOptionPane.showInputDialog(null, "Enter symbol of choice (X or O)");
-        name2 = JOptionPane.showInputDialog(null, "Player2 Name");
+        pl1name = JOptionPane.showInputDialog(null, "Player1 Name");
+        pl1symbol = JOptionPane.showInputDialog(null, "Enter symbol of choice (X or O)");
+        pl2name = JOptionPane.showInputDialog(null, "Player2 Name");
         if(val1.equals("X"))
-            val2="O";
+            pl2symbol="O";
         else
-            val2="X";
-        JOptionPane.showMessageDialog(null, "Your symbol is "+val2);
-        jLabel2.setText(name1);
+            pl2symbol="X";
+        JOptionPane.showMessageDialog(null, "Your symbol is "+pl2symbol);
+        jLabel2.setText(pl1name);
         
         for(int i = 0; i < 3; i++){
             for( int j = 0; j< 3 ; j++){
@@ -186,9 +186,7 @@ public class GameWindow extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(119, 119, 119)
-                        .addComponent(title))
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(10, 10, 10)
