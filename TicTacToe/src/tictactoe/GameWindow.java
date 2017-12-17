@@ -18,17 +18,19 @@ import javax.swing.JOptionPane;
  *
  * @author nikhil
  */
-public class GameWindow extends javax.swing.JFrame {
+public class GameWindow extends javax.swing.JFrame 
+{
 
     /**
      * Creates new form GameWindow
      */
-    int m=0;
+    int indicator=0;
     private JLabel playingLabels[][] = new JLabel[3][3];
     private final int PLAYINGAREAX = 110, PLAYINGAREAY = 100, CELLSIZE = 40, SPACEBETWEENCELLS = 10;
     private int currentPlayer = 0;
-    
-    private void reset(){
+    //Reset the game to new window
+    private void reset()
+    {
         for(int i = 0; i < 3; i++){
             for(int j = 0; j < 3; j++){
                 playingLabels[i][j].setText(".");
@@ -36,9 +38,10 @@ public class GameWindow extends javax.swing.JFrame {
         }
         currentPlayer = 0;
     }
-
-    private void endGame(int currentPlayer){
-        if(m==1)
+//Code to announce the winner
+    private void endGame(int currentPlayer)
+    {
+        if(indicator==1)
         {
             if(currentPlayer==1)
             {
@@ -48,11 +51,11 @@ public class GameWindow extends javax.swing.JFrame {
         }
         if(currentPlayer + 1==1)
         {
-            JOptionPane.showMessageDialog(null, jTextField1.getText() + " Wins !!!");
+            JOptionPane.showMessageDialog(null, Player1Name.getText() + " Wins !!!");
         }
         if(currentPlayer + 1==2)
         {
-            JOptionPane.showMessageDialog(null, jTextField2.getText() + " Wins !!!");
+            JOptionPane.showMessageDialog(null, Player2Name.getText() + " Wins !!!");
         }
         int playAgainOrNot = JOptionPane.showConfirmDialog(null, "Want to play again???", "Continue?", 0);
         if(playAgainOrNot == JOptionPane.YES_OPTION)
@@ -107,6 +110,7 @@ public class GameWindow extends javax.swing.JFrame {
         
         if(isGameOver)
             endGame(currentPlayer);
+//checking whether game drawn        
         int count=0;
         for(int i=0;i<3;i++)
         {
@@ -118,41 +122,48 @@ public class GameWindow extends javax.swing.JFrame {
                 }
                 
             }
+            
         }
+//If game drawn then to ask wheather to continue        
         if(count==0)
         {
-            //JOptionPane.showMessageDialog(null, jTextField2.getText() + " Wins !!!");
             JOptionPane.showMessageDialog(null,"GameDrawn");
-        int playAgainOrNot = JOptionPane.showConfirmDialog(null, "Want to play again???", "Continue?", 0);
-        if(playAgainOrNot == JOptionPane.YES_OPTION)
-            reset();
-        else 
-            dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+            int playAgainOrNot = JOptionPane.showConfirmDialog(null, "Want to play again???", "Continue?", 0);
+            if(playAgainOrNot == JOptionPane.YES_OPTION)
+            {
+                reset();
+            }
+            else
+            { 
+                dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+            }
         }
     }
-    
+    //When mouse clicks one of labels 
     private void cellClicked(MouseEvent evt){
         JLabel currentCell = (JLabel) evt.getComponent();
         if(currentPlayer == 0){
             currentCell.setText("O");
-            if(m==0)
+            //Displaying player whose turn is  
+            if(indicator==0)
             {
-                jTextField3.setText(jTextField2.getText());
+                DisplayForPlayerTurn.setText(Player2Name.getText());
             }
-            else jTextField3.setText(jTextField1.getText());
+            else DisplayForPlayerTurn.setText(Player1Name.getText());
         }
         else{
             currentCell.setText("X");
-            if(m==0)
+            //Displaying player whose turn is
+            if(indicator==0)
             {
-                jTextField3.setText(jTextField1.getText());
+                DisplayForPlayerTurn.setText(Player1Name.getText());
             }
-            else jTextField3.setText(jTextField2.getText());
+            else DisplayForPlayerTurn.setText(Player2Name.getText());
         }
         currentPlayer = (currentPlayer + 1) % 2;
         check( (currentPlayer + 1) % 2 );
     }
-    
+    //Adding components to playing Area
     private void addPlayingComponents(JPanel playingArea){
         for(int i = 0; i < 3; i++){
             for( int j = 0; j< 3 ; j++){
@@ -172,8 +183,9 @@ public class GameWindow extends javax.swing.JFrame {
             }
         }
     }
-    
-    public GameWindow() {
+    //Game Window intialization
+    public GameWindow() 
+    {
         initComponents();
         
         // Adding panel
@@ -196,18 +208,16 @@ public class GameWindow extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
 
-        buttonGroup1 = new javax.swing.ButtonGroup();
-        buttonGroup2 = new javax.swing.ButtonGroup();
-        buttonGroup3 = new javax.swing.ButtonGroup();
+        GroupOf_O_and_X = new javax.swing.ButtonGroup();
         title = new javax.swing.JLabel();
         jInternalFrame1 = new javax.swing.JInternalFrame();
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
-        jTextField3 = new javax.swing.JTextField();
+        Player1Name = new javax.swing.JTextField();
+        Player2Name = new javax.swing.JTextField();
+        SubmitButton = new javax.swing.JButton();
+        RadioButtonFor_X = new javax.swing.JRadioButton();
+        RadioButtonFor_O = new javax.swing.JRadioButton();
+        DisplayForPlayerTurn = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -219,36 +229,23 @@ public class GameWindow extends javax.swing.JFrame {
         jInternalFrame1.setVisible(true);
 
         jLabel1.setText("Enter Player Names.Select choice of first player.");
-
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        SubmitButton.setText("Submit");
+        SubmitButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                SubmitButtonActionPerformed(evt);
             }
         });
 
-        jTextField2.addActionListener(new java.awt.event.ActionListener() {
+        GroupOf_O_and_X.add(RadioButtonFor_X);
+        RadioButtonFor_X.setText("X");
+        RadioButtonFor_X.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField2ActionPerformed(evt);
+                RadioButtonFor_XActionPerformed(evt);
             }
         });
 
-        jButton1.setText("Submit");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
-        buttonGroup1.add(jRadioButton1);
-        jRadioButton1.setText("X");
-        jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton1ActionPerformed(evt);
-            }
-        });
-
-        buttonGroup1.add(jRadioButton2);
-        jRadioButton2.setText("O");
+        GroupOf_O_and_X.add(RadioButtonFor_O);
+        RadioButtonFor_O.setText("O");
 
         javax.swing.GroupLayout jInternalFrame1Layout = new javax.swing.GroupLayout(jInternalFrame1.getContentPane());
         jInternalFrame1.getContentPane().setLayout(jInternalFrame1Layout);
@@ -258,16 +255,16 @@ public class GameWindow extends javax.swing.JFrame {
                 .addGap(31, 31, 31)
                 .addGroup(jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jInternalFrame1Layout.createSequentialGroup()
-                        .addComponent(jRadioButton1)
+                        .addComponent(RadioButtonFor_X)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jRadioButton2))
+                        .addComponent(RadioButtonFor_O))
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jTextField1)
-                    .addComponent(jTextField2))
+                    .addComponent(Player1Name)
+                    .addComponent(Player2Name))
                 .addContainerGap())
             .addGroup(jInternalFrame1Layout.createSequentialGroup()
                 .addGap(82, 82, 82)
-                .addComponent(jButton1)
+                .addComponent(SubmitButton)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jInternalFrame1Layout.setVerticalGroup(
@@ -276,15 +273,15 @@ public class GameWindow extends javax.swing.JFrame {
                 .addGap(7, 7, 7)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(Player1Name, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jRadioButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jRadioButton2))
+                    .addComponent(RadioButtonFor_X, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(RadioButtonFor_O))
                 .addGap(18, 18, 18)
-                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(Player2Name, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(48, 48, 48)
-                .addComponent(jButton1)
+                .addComponent(SubmitButton)
                 .addContainerGap(127, Short.MAX_VALUE))
         );
 
@@ -297,7 +294,7 @@ public class GameWindow extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(DisplayForPlayerTurn, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jInternalFrame1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
@@ -320,40 +317,35 @@ public class GameWindow extends javax.swing.JFrame {
                         .addComponent(jInternalFrame1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(DisplayForPlayerTurn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
-    }// </editor-fold>                        
-
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {                                            
+    }// </editor-fold>      
+    //Actions On pressing submit buttons are:-
+    //names of player are recorded
+    //checks wheather player names have given or not if not given then display error 
+    private void SubmitButtonActionPerformed(java.awt.event.ActionEvent evt)
+    {                                         
         // TODO add your handling code here:
-    }                                           
-
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        // TODO add your handling code here:
-        
-    }                                           
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        // TODO add your handling code here:
-        jTextField3.setText(jTextField1.getText());
-        if(jTextField1.getText().equals(""))
+        DisplayForPlayerTurn.setText(Player1Name.getText());
+        if(Player1Name.getText().equals(""))
         {
             JOptionPane.showMessageDialog(null,"Error : Please Enter Player 1 Name");
         }
-        if(jTextField2.getText().equals(""))
+        if(Player2Name.getText().equals(""))
         {
             JOptionPane.showMessageDialog(null,"Error : Please Enter Player 2 Name");
         }
         else jInternalFrame1.setVisible(false);
     }                                        
-
-    private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                              
+//This is radio button for X
+//integer indicator turns from 0 to red indicating that radio button is pressed
+    private void RadioButtonFor_XActionPerformed(java.awt.event.ActionEvent evt) {                                              
         // TODO add your handling code here:
        currentPlayer=1;
-       m=1;
+       indicator=1;
     }                                             
 
     /**
@@ -392,18 +384,16 @@ public class GameWindow extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify                     
-    private javax.swing.ButtonGroup buttonGroup1;
-    private javax.swing.ButtonGroup buttonGroup2;
-    private javax.swing.ButtonGroup buttonGroup3;
-    private javax.swing.JButton jButton1;
+    private javax.swing.ButtonGroup GroupOf_O_and_X;
+    private javax.swing.JButton SubmitButton;
     private javax.swing.JInternalFrame jInternalFrame1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
+    private javax.swing.JRadioButton RadioButtonFor_X;
+    private javax.swing.JRadioButton RadioButtonFor_O;
+    private javax.swing.JTextField Player1Name;
+    private javax.swing.JTextField Player2Name;
+    private javax.swing.JTextField DisplayForPlayerTurn;
     private javax.swing.JLabel title;
     // End of variables declaration                   
 }
