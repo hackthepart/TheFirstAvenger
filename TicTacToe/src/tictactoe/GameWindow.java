@@ -18,11 +18,16 @@ import javax.swing.JOptionPane;
  *
  * @author nikhil
  */
+
 public class GameWindow extends javax.swing.JFrame {
 
+    //player 1 and 2 names and chosen signs
+    String pName1;
+    String pName2, currentPlayerMove;
+    int sign1,sign2;
     /**
      * Creates new form GameWindow
-     */
+   */
     private JLabel playingLabels[][] = new JLabel[3][3];
     private final int PLAYINGAREAX = 110, PLAYINGAREAY = 100, CELLSIZE = 40, SPACEBETWEENCELLS = 10;
     private int currentPlayer = 0;
@@ -37,7 +42,11 @@ public class GameWindow extends javax.swing.JFrame {
     }
 
     private void endGame(int currentPlayer){
-        JOptionPane.showMessageDialog(null, "Player " + (currentPlayer + 1) + " Wins !!!");
+        // name displayed
+        if(currentPlayer == 0)
+            JOptionPane.showMessageDialog(null, "Player " + pName1 + " Wins !!!");
+        else
+            JOptionPane.showMessageDialog(null, "Player " + pName2 + " Wins !!!");
         int playAgainOrNot = JOptionPane.showConfirmDialog(null, "Want to play again???", "Continue?", 0);
         if(playAgainOrNot == JOptionPane.YES_OPTION)
             reset();
@@ -47,9 +56,17 @@ public class GameWindow extends javax.swing.JFrame {
     }
     
     private void check(int currentPlayer){
-        String currentPlayerMove = "O";
-        if(currentPlayer == 1)
+        //alloting current move according to current player and chosen sign
+        if(sign1 == 0){
+            currentPlayerMove = "O";
+            if(currentPlayer == 1)
+                currentPlayerMove = "X";
+        }
+        else{
             currentPlayerMove = "X";
+            if(currentPlayer == 1)
+                currentPlayerMove = "O";
+        }
         boolean isGameOver = false, flag;
 
         // checking horizontal match
@@ -96,17 +113,31 @@ public class GameWindow extends javax.swing.JFrame {
     
     private void cellClicked(MouseEvent evt){
         JLabel currentCell = (JLabel) evt.getComponent();
-        if(currentPlayer == 0){
-            currentCell.setText("O");
+        System.out.println(currentCell.getText());
+        //cheking for correct player - sign match and whether cell clicked is occupied or not
+        if(((current.getText()).equals(pName1))&&(currentPlayer == 0)&&((currentCell.getText() != "O")&&(currentCell.getText() != "X"))){
+            if(sign1 == 0)
+                currentCell.setText("O");
+            else
+                currentCell.setText("X");
+            current.setText(pName2);
+        }
+        else if(((current.getText()).equals(pName2))&&(currentPlayer == 1)){
+            if(sign2 == 0)
+                currentCell.setText("O");
+            else
+                currentCell.setText("X");
+            current.setText(pName1);
         }
         else{
-            currentCell.setText("X");
+            JOptionPane.showMessageDialog(null, "Cell is already occupied! Try Again!!");
         }
         currentPlayer = (currentPlayer + 1) % 2;
         check( (currentPlayer + 1) % 2 );
     }
     
     private void addPlayingComponents(JPanel playingArea){
+        current.setText(pName1);
         for(int i = 0; i < 3; i++){
             for( int j = 0; j< 3 ; j++){
                 playingLabels[i][j] = new JLabel(".");
@@ -126,10 +157,14 @@ public class GameWindow extends javax.swing.JFrame {
         }
     }
     
-    public GameWindow() {
+    public GameWindow(String pName1, String pName2, int sign1, int sign2) {
         initComponents();
         
-        // Adding panel
+        // Adding panel and  names and choices
+        this.pName1 = pName1;
+        this.pName2 = pName2;
+        this.sign1 = sign1;
+        this.sign2 = sign2;
         JPanel playingArea = new JPanel();
         playingArea.setLocation(PLAYINGAREAX, PLAYINGAREAY);
         playingArea.setSize( 3 * (CELLSIZE + SPACEBETWEENCELLS) , 3 * (CELLSIZE + SPACEBETWEENCELLS));
@@ -139,7 +174,6 @@ public class GameWindow extends javax.swing.JFrame {
         addPlayingComponents(playingArea);
         
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
