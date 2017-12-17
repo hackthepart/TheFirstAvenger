@@ -33,7 +33,7 @@ public class GameWindow extends javax.swing.JFrame {
     private JLabel playingLabels[][] = new JLabel[3][3];
     private final int PLAYINGAREAX = 110, PLAYINGAREAY = 100, CELLSIZE = 40, SPACEBETWEENCELLS = 10;
     private int currentPlayer;
-    private boolean isServerBoolean = true;
+    private boolean isServerBoolean = true, isGameOver;
     private final int port = 747;
     private String playerName,playerSymbol,opponentName,opponentSymbol,IP;
     public int message = 0;
@@ -50,20 +50,28 @@ public class GameWindow extends javax.swing.JFrame {
                 playingLabels[i][j].setText(".");
             }
         }
-        currentPlayer = 0;
+        for(int i=0;i<3;i++){
+            for(int j=0;j<3;j++){
+                arr[i][j]=1;
+            }
+        }
+        if(!isServerBoolean){
+            //System.out.println("c8");
+            message = clientScan.nextInt();
+            //System.out.println("c9");
+            decode(message);
+            //System.out.println("c10");
+            print();
+        }
     }
 
-    private void endGame(int currentPlayer){
-        if(currentPlayer == 747){
+    private void endGame(String playerName){
+        if((checkBlank() == 0)&&!isGameOver){
             JOptionPane.showMessageDialog(null, "Draw :)");  
         }
-        else if(currentPlayer == 2){
-            JOptionPane.showMessageDialog(null, "Client Wins");
+        else{
+            JOptionPane.showMessageDialog(null, playerName + " Wins");
         }
-        else if(currentPlayer ==3){
-            JOptionPane.showMessageDialog(null, "Server Wins");
-        }
-           // JOptionPane.showMessageDialog(null, "Player " + (currentPlayer + 1) + " Wins !!!");
             int playAgainOrNot = JOptionPane.showConfirmDialog(null, "Want to play again???", "Continue?", 0);
             if(playAgainOrNot == JOptionPane.YES_OPTION)
                 reset();
@@ -71,9 +79,10 @@ public class GameWindow extends javax.swing.JFrame {
                 dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
     }
     
-private void check(String playerSymbol){
+    private boolean check(String playerSymbol, String playerName){
         String currentPlayerMove = playerSymbol;
-        boolean isGameOver = false, flag;
+        isGameOver = false;
+        boolean flag;
 
         // checking horizontal match
         for(int i = 0; i < 3; i++){
@@ -111,78 +120,108 @@ private void check(String playerSymbol){
         }
         if(flag)
             isGameOver = true;
-        if(checkBlank() == 0){
-            endGame(747);
+        if((checkBlank() == 0)||isGameOver){
+            endGame(playerName);
+            return true;
         }
-        else if(isGameOver)
-            endGame(currentPlayer);
-        
+        return false;
 }
     
     private void cellClicked(MouseEvent evt){
-        JLabel currentCell = (JLabel) evt.getComponent();
-        System.out.println("isServer : " + isServerBoolean);
-        System.out.println("currentPlayer : " + currentPlayer);
-        if(currentCell.getText().equals(".")){
-            if(isServerBoolean){
-                turnLabel.setText("(*) My turn [Name: " + playerName + "]");
-                turnLabel.paintImmediately(turnLabel.getVisibleRect());
-                System.out.println("ccs1");
-                print();
-                System.out.println("ccs2");
-                System.out.println("X:"+currentCell.getX()/(CELLSIZE + SPACEBETWEENCELLS));
-                System.out.println("X:"+currentCell.getY()/(CELLSIZE + SPACEBETWEENCELLS));
-                arr[currentCell.getX()/(CELLSIZE + SPACEBETWEENCELLS)][currentCell.getY()/(CELLSIZE + SPACEBETWEENCELLS)] = 2;
-                System.out.println("ccs3");
-                currentCell.setText(playerSymbol);
-                System.out.println("ccs4");
-                currentCell.paintImmediately(currentCell.getVisibleRect());
-                System.out.println("ccs5");
-                 // check for server win
-                System.out.println("ccs6");
-                message = code();
-                serverSendMove.println(message);
-                check(playerSymbol);
-                turnLabel.setText("( ) Opponent turn [Name: " + opponentName + "]");
-                turnLabel.paintImmediately(turnLabel.getVisibleRect());
-                System.out.println("ccs7");
-                message = serverScan.nextInt();
-                System.out.println("ccs8");
-                decode(message);
-                System.out.println("ccs9" + message);
-                print();
-                System.out.println("ccs10");
-                check(opponentSymbol);
-                System.out.println("ccs11");
+        code:{
+            JLabel currentCell = (JLabel) evt.getComponent();
+            //System.out.println("isServer : " + isServerBoolean);
+            if(currentCell.getText().equals(".")){
+                if(isServerBoolean){
+                    //System.out.println("ccs1");
+                    print();
+                    turnLabel.setText("(*) " + playerName + " turn");
+                    turnLabel.paintImmediately(turnLabel.getVisibleRect());
+                    //System.out.println("ccs2");
+                    //System.out.println("X:"+currentCell.getX()/(CELLSIZE + SPACEBETWEENCELLS));
+                    //System.out.println("X:"+currentCell.getY()/(CELLSIZE + SPACEBETWEENCELLS));
+                    arr[currentCell.getX()/(CELLSIZE + SPACEBETWEENCELLS)][currentCell.getY()/(CELLSIZE + SPACEBETWEENCELLS)] = 2;
+                    //System.out.println("ccs3");
+                    currentCell.setText(playerSymbol);
+                    //System.out.println("ccs4");
+                    currentCell.paintImmediately(currentCell.getVisibleRect());
+                    //System.out.println("ccs5");
+                    //System.out.println("ccs6");
+                    message = code();
+                    serverSendMove.println(message);
+                    if(check(playerSymbol,playerName)){
+                        break code;
+                    }
+                    turnLabel.setText("( ) " + opponentName + " turn");
+                    turnLabel.paintImmediately(turnLabel.getVisibleRect());
+                    //System.out.println("ccs7");
+                    try{
+                        message = serverScan.nextInt();
+                    }
+                    catch(Exception e){
+                        if(e instanceof java.util.NoSuchElementException){
+                            JOptionPane.showMessageDialog(null, opponentName + " disconnected");
+                        }
+                    }
+                    //System.out.println("ccs8");
+                    decode(message);
+                    //System.out.println("ccs9" + message);
+                    print();
+                    turnLabel.setText("(*) " + playerName + " turn");
+                    turnLabel.paintImmediately(turnLabel.getVisibleRect());
+                    //System.out.println("ccs10");
+                    if(check(opponentSymbol,opponentName)){
+                        break code;
+                    }
+                    //System.out.println("ccs11");
+                }
+                else{
+                    print();
+                    turnLabel.setText("(*) " + playerName + " turn");
+                    turnLabel.paintImmediately(turnLabel.getVisibleRect());
+                    //System.out.println("cc1");
+                    
+                    //System.out.println("cc2");
+                    arr[currentCell.getX()/(CELLSIZE + SPACEBETWEENCELLS)][currentCell.getY()/(CELLSIZE + SPACEBETWEENCELLS)] = 3;
+                    //System.out.println("cc3");
+                    currentCell.setText(playerSymbol);
+                    //System.out.println("cc4");
+                    currentCell.paintImmediately(currentCell.getVisibleRect());
+                    //System.out.println("cc5");
+
+                    //System.out.println("cc6");
+                    message = code();
+                    clientSendMove.println(message);
+                    if(check(playerSymbol,playerName)){
+                        break code;
+                    }
+                    turnLabel.setText("( ) " + opponentName + " turn");
+                    turnLabel.paintImmediately(turnLabel.getVisibleRect());
+                    //System.out.println("cc7");
+                    try{
+                        message = clientScan.nextInt();
+                    }
+                    catch(Exception e){
+                        if(e instanceof java.util.NoSuchElementException){
+                            JOptionPane.showMessageDialog(null, opponentName + " disconnected");
+                        }
+                    }
+                    
+                    //System.out.println("cc8");
+                    decode(message);
+                    //System.out.println("cc9" + message);
+                    print();
+                    turnLabel.setText("(*) " + playerName + " turn");
+                    turnLabel.paintImmediately(turnLabel.getVisibleRect());
+                    //System.out.println("cc10");
+                    if(check(opponentSymbol,opponentName)){
+                        break code;
+                    }
+                    //System.out.println("cc11");
+                }
             }
             else{
-                turnLabel.setText("(*) My turn [Name: " + playerName + "]");
-                turnLabel.paintImmediately(turnLabel.getVisibleRect());
-                System.out.println("cc1");
-                print();
-                System.out.println("cc2");
-                arr[currentCell.getX()/(CELLSIZE + SPACEBETWEENCELLS)][currentCell.getY()/(CELLSIZE + SPACEBETWEENCELLS)] = 3;
-                System.out.println("cc3");
-                currentCell.setText(playerSymbol);
-                System.out.println("cc4");
-                currentCell.paintImmediately(currentCell.getVisibleRect());
-                System.out.println("cc5");
-                
-                System.out.println("cc6");
-                message = code();
-                clientSendMove.println(message);
-                check(playerSymbol);
-                turnLabel.setText("( ) Opponent turn [Name: " + opponentName + "]");
-                turnLabel.paintImmediately(turnLabel.getVisibleRect());
-                System.out.println("cc7");
-                message = clientScan.nextInt();
-                System.out.println("cc8");
-                decode(message);
-                System.out.println("cc9" + message);
-                print();
-                System.out.println("cc10");
-                check(opponentSymbol);
-                System.out.println("cc11");
+                JOptionPane.showMessageDialog(null, "Place already occupied");
             }
         }
     }
@@ -322,28 +361,28 @@ private void check(String playerSymbol){
                                     .addComponent(opponentSymbolLabel)
                                     .addComponent(opponentNameLabel))
                                 .addGap(0, 0, Short.MAX_VALUE))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(symbolLabel)
-                        .addGap(18, 18, 18)
-                        .addComponent(symbolField, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(isClient, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(isServer, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(ipLabel)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(ipField, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE))
-                            .addComponent(turnLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(ipField, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(turnLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(startButton, javax.swing.GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE))
+                        .addComponent(startButton, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(nameLabel)
                         .addGap(18, 18, 18)
-                        .addComponent(nameField)))
+                        .addComponent(nameField))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(symbolLabel)
+                        .addGap(18, 18, 18)
+                        .addComponent(symbolField, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -373,11 +412,11 @@ private void check(String playerSymbol){
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(symbolField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(symbolLabel))
+                .addGap(163, 163, 163)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(163, 163, 163)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(isServer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(isServer, javax.swing.GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE)
                             .addComponent(turnLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -385,7 +424,7 @@ private void check(String playerSymbol){
                             .addComponent(ipField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(ipLabel)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(startButton)))
                 .addContainerGap())
         );
@@ -403,8 +442,10 @@ private void check(String playerSymbol){
                 JOptionPane.showMessageDialog(null, "Enter Symbol");
             }
             else{
-                playerNameLabel.setText(playerName);
+                playerNameLabel.setText(nameField.getText());
                 playerNameLabel.paintImmediately(playerNameLabel.getVisibleRect());
+                playerSymbolLabel.setText(symbolField.getText());
+                playerSymbolLabel.paintImmediately(playerSymbolLabel.getVisibleRect());
                 if(isClient.isSelected()){
                     isServerBoolean = false;
                     if(ipField.getText().equals("")){
@@ -413,26 +454,26 @@ private void check(String playerSymbol){
                     else{
                         try {
                             IP = ipField.getText();
-                            System.out.println("stsygyds");
+                            //System.out.println("stsygyds");
                             _clientSocket = new Socket(IP,port);
-                            System.out.println("c1");
+                            //System.out.println("c1");
                             clientSendMove = new PrintStream(_clientSocket.getOutputStream());
-                            System.out.println("c2");
+                            //System.out.println("c2");
                             clientSendMove.println(nameField.getText());
-                            System.out.println("c3");
+                            //System.out.println("c3");
                             clientScan = new Scanner(_clientSocket.getInputStream());
-                            System.out.println("c4");
+                            //System.out.println("c4");
                             opponentName = clientScan.nextLine();
-                            System.out.println("c5");
+                            //System.out.println("c5");
                             clientSendMove.println(symbolField.getText());
-                            System.out.println("c6");
+                            //System.out.println("c6");
                             opponentSymbol = clientScan.nextLine();
-                            System.out.println("c7");
+                            //System.out.println("c7");
                             playerName = nameField.getText();
                             playerSymbol = symbolField.getText();
-                            System.out.println("client locking");
+                            //System.out.println("client locking");
                             lockGUI(true);
-                            System.out.println("client Locked");
+                            //System.out.println("client Locked");
                         } catch (IOException ex) {
                             Logger.getLogger(GameWindow.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -443,53 +484,59 @@ private void check(String playerSymbol){
                     
                     try {
                         serverSocket = new ServerSocket(port);
-                        System.out.println("s1");
+                        //System.out.println("s1");
                         _serverSocket = serverSocket.accept();
-                        System.out.println("s2");
+                        //System.out.println("s2");
                         serverScan = new Scanner(_serverSocket.getInputStream());
-                        System.out.println("s3");
+                        //System.out.println("s3");
                         opponentName = serverScan.nextLine();
-                        System.out.println("s4");
+                        //System.out.println("s4");
                         serverSendMove = new PrintStream(_serverSocket.getOutputStream());
-                        System.out.println("s5");
+                        //System.out.println("s5");
                         serverSendMove.println(nameField.getText());
-                        System.out.println("s6");
+                        //System.out.println("s6");
                         opponentSymbol = serverScan.nextLine();
-                        System.out.println("s7");
+                        //System.out.println("s7");
                         if(symbolField.getText().equals(opponentSymbol)){
                             if(opponentSymbol != "X")
                                 playerSymbol = "X";
                             else
                                 playerSymbol = "O";
                             JOptionPane.showMessageDialog(null, "Your symbol match with opponent symbol");
-                        }else{
+                        }
+                        else{
                             playerSymbol = symbolField.getText();
-                            System.out.println("s8");
+                            //System.out.println("s8");
                             serverSendMove.println(playerSymbol);
-                            System.out.println("s9");
+                            //System.out.println("s9");
                             playerName = nameField.getText();
                             playerSymbol = symbolField.getText();
-                            System.out.println("s10");
+                            //System.out.println("s10");
                         }
-                        System.out.println("server locking");
+                        //System.out.println("server locking");
                         lockGUI(true);
-                        System.out.println("server locked");
+                        //System.out.println("server locked");
                     } catch (IOException ex) {
                         Logger.getLogger(GameWindow.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }            
             }
         }
-        /*
-        initialised with scanner and printer objects
-        */
-        System.out.println("s11 and c7");
+        turnLabel.setText("(*)" + playerName + "] turn");
+        turnLabel.paintImmediately(turnLabel.getVisibleRect());
+        opponentNameLabel.setText(opponentName);
+        opponentNameLabel.paintImmediately(opponentNameLabel.getVisibleRect());
+        opponentSymbolLabel.setText(opponentSymbol);
+        opponentSymbolLabel.paintImmediately(playerNameLabel.getVisibleRect());
+        //System.out.println("s11 and c7");
         if(!isServerBoolean){
-            System.out.println("c8");
+            turnLabel.setText("( )" + opponentName + "] turn");
+            turnLabel.paintImmediately(turnLabel.getVisibleRect());
+            //System.out.println("c8");
             message = clientScan.nextInt();
-            System.out.println("c9");
+            //System.out.println("c9");
             decode(message);
-            System.out.println("c10");
+            //System.out.println("c10");
             print();
         }
     }//GEN-LAST:event_startButtonActionPerformed
@@ -556,19 +603,9 @@ private void check(String playerSymbol){
                         playingLabels[i][j].paintImmediately(playingLabels[i][j].getVisibleRect());
                     }
                 }
-                /*
-                if(arr[i][j]==1){
-                    playingLabels[i][j].setText(".");
-                }
-                else if(arr[i][j]==2){
-                    playingLabels[i][j].setText(playerSymbol);
-                }
-                else if(arr[i][j]==3){
-                    playingLabels[i][j].setText(opponentSymbol);
-                }*/
-                System.out.print(arr[i][j]);
+                //System.out.print(arr[i][j]);
             }
-            System.out.println(" ");
+            //System.out.println(" ");
         }
     }
     
