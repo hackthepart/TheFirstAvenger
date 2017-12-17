@@ -33,16 +33,16 @@ public class GameWindow extends javax.swing.JFrame {
         
         //Loop will continue until user enters something
         while(true){
-        player1 = JOptionPane.showInputDialog("Player 1 Name: ");
-        if(player1.length()>0)
-            break;
+            player1 = JOptionPane.showInputDialog("Player 1 Name: ");
+            if(player1.length()>0)
+                break;
         }
         
         //Loop will continue until user enters a different name from previous
         while(true){
-        player2 = JOptionPane.showInputDialog("Player 2 Name: ");
-        if(player2.length()>0&&!player2.equals(player1))
-            break;
+            player2 = JOptionPane.showInputDialog("Player 2 Name: ");
+            if(player2.length()>0&&!player2.equals(player1))
+                break;
         }
     }
     
@@ -60,13 +60,13 @@ public class GameWindow extends javax.swing.JFrame {
                          "O");//Object initialValue 
         if(choice == 0 ){
            currentPlayer=1;
-        }else{
+        }
+        else{
            currentPlayer=0;
         }
     }
     
     private void reset(){
-        playerName.setText(player1);
         chooseFromOorX();
         playerName.setText(player1);
         for(int i = 0; i < 3; i++){
@@ -132,9 +132,6 @@ public class GameWindow extends javax.swing.JFrame {
             if(!playingLabels[i][2 - i].getText().equals(currentPlayerMove))
                 flag = false;
         }
-        if(flag)
-            isGameOver = true;
-        
         if(flag)
             isGameOver = true;
         if(isGameOver)
