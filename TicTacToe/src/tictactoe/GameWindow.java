@@ -37,7 +37,7 @@ public class GameWindow extends javax.swing.JFrame {
     int moves[][]=new int[3][3]; //0-empty 1-player 2-opponent
     boolean playing=false,connected=false;
     int x,y;
-    
+    JPanel playingArea;
     String ip = "127.0.0.1";
     String player,opponent;
     String playerSymbol,opponentSymbol;
@@ -59,11 +59,11 @@ public class GameWindow extends javax.swing.JFrame {
     private void endGame(int currentPlayer){
         if(currentPlayer==0)
         {
-            JOptionPane.showMessageDialog(null, "Player " + player + " Wins !!!");
+            JOptionPane.showMessageDialog(null, player + " Wins !!!");
         }
         else
         {
-            JOptionPane.showMessageDialog(null, "Player " + opponent + " Wins !!!");
+            JOptionPane.showMessageDialog(null, opponent + " Wins !!!");
         }
         int playAgainOrNot = JOptionPane.showConfirmDialog(null, "Want to play again???", "Continue?", 0);
         if(playAgainOrNot == JOptionPane.YES_OPTION)
@@ -121,54 +121,96 @@ public class GameWindow extends javax.swing.JFrame {
     }
     
     private void cellClicked(MouseEvent evt){
-        if(!connected)
-        {
-            JOptionPane.showMessageDialog(null, "Wait for opponent to connect.");
-        }
-        else if(connected&&!playing)
-        {
-            JOptionPane.showMessageDialog(null, "Wait for opponent's turn");
-        }
-        else
-        {
-            JLabel currentCell = (JLabel) evt.getComponent();
-            int px = currentCell.getX()/(CELLSIZE+SPACEBETWEENCELLS);
-            int py = currentCell.getY()/(CELLSIZE+SPACEBETWEENCELLS);
-            if(moves[px][py]==0)
+        end:{
+            if(!connected)
             {
-                currentCell.setText(playerSymbol);
-                moves[px][py]=1;
-                playing=false;
-                if(!check())
-                {
-                    System.out.println("123");
-                    
-                    cPrintStream.println(px);System.out.println("px:"+px);
-                    cPrintStream.println(py);System.out.println("py:"+py);
-                    x=cScanner.nextInt();System.out.println("rx:"+x);
-                    y=cScanner.nextInt();System.out.println("ry:"+y);
-                    moves[x][y]=2;
-                    if(check())
-                    {
-                        endGame(1);
-                    }
-                }
-                else
-                {
-                    endGame(0);
-                }
-                playing=true;
+                JOptionPane.showMessageDialog(null, "Wait for opponent to connect.");
+            }
+            else if(connected&&!playing)
+            {
+                JOptionPane.showMessageDialog(null, "Wait for opponent's turn");
             }
             else
             {
-                JOptionPane.showMessageDialog(null, "Choose another spot");
+                JLabel currentCell = (JLabel) evt.getComponent();
+                int px = currentCell.getX()/(CELLSIZE+SPACEBETWEENCELLS);
+                int py = currentCell.getY()/(CELLSIZE+SPACEBETWEENCELLS);
+                if(moves[px][py]==0)
+                {
+                    currentCell.setText(playerSymbol);
+                    moves[px][py]=1;
+                    playing=false;
+                    if(cli_ser_ComboBox.getSelectedItem().equals("Server"))
+                    {
+                        sPrintStream.println(px);
+                        sPrintStream.println(py);System.out.println("server print :"+px+", "+py);
+                        if(check())
+                        {
+                            endGame(0);
+                            break end;
+                        }
+                        x=sScanner.nextInt();
+                        y=sScanner.nextInt();System.out.println("server recieve :"+x+", "+y);
+                        moves[x][y]=2;
+                        for(int i=0;i<3;i++)
+                        {
+                            for(int j=0;j<3;j++)
+                            {
+                                if((playingArea.getComponent(i+(j*3)).getX()== x) && (playingArea.getComponent(i+(j*3)).getY() == y) )
+                                {
+                                    JLabel temp = (JLabel) playingArea.getComponent(i+(j*3));
+                                    temp.setText(opponentSymbol);
+                                }
+                            }
+                        }
+                        if(check())
+                        {
+                            endGame(1);
+                            break end;
+                        }
+                    }
+                    else
+                    {
+                        cPrintStream.println(px);
+                        cPrintStream.println(py);System.out.println("client print :"+px+", "+py);
+                        if(check())
+                        {
+                            endGame(0);
+                            break end;
+                        }
+                        x=cScanner.nextInt();
+                        y=cScanner.nextInt();System.out.println("client recieve :"+x+", "+y);
+                        moves[x][y]=2;
+                        for(int i=0;i<3;i++)
+                        {
+                            for(int j=0;j<3;j++)
+                            {
+                                if((playingArea.getComponent(i+(j*3)).getX()== x) && (playingArea.getComponent(i+(j*3)).getY() == y) )
+                                {
+                                    JLabel temp = (JLabel) playingArea.getComponent(i+(j*3));
+                                    temp.setText(opponentSymbol);
+                                }
+                            }
+                        }
+                        if(check())
+                        {
+                            endGame(1);
+                            break end;
+                        }
+                    }
+                    playing=true;
+                }
             }
         }
     }
     
-    private void playMove(int x,int y)
+    private void update(int x,int y)
     {
         
+        if(check())
+        {
+            endGame(1);
+        }
     }
         
     private void addPlayingComponents(JPanel playingArea){
@@ -195,7 +237,7 @@ public class GameWindow extends javax.swing.JFrame {
         initComponents();
         
         // Adding panel
-        JPanel playingArea = new JPanel();
+        playingArea = new JPanel();
         playingArea.setLocation(PLAYINGAREAX, PLAYINGAREAY);
         playingArea.setSize( 3 * (CELLSIZE + SPACEBETWEENCELLS) , 3 * (CELLSIZE + SPACEBETWEENCELLS));
         playingArea.setVisible(true);
@@ -399,8 +441,19 @@ public class GameWindow extends javax.swing.JFrame {
                     connected=true;
                     playerDisplay.setText(player);
                     opponentDisplay.setText(opponent); 
-                    x=cScanner.nextInt();System.out.println("rx:"+x);
-                    y=cScanner.nextInt();System.out.println("ry:"+y);
+                    x=cScanner.nextInt();
+                    y=cScanner.nextInt();System.out.println("client recieve :"+x+", "+y);
+                    for(int i=0;i<3;i++)
+                        {
+                            for(int j=0;j<3;j++)
+                            {
+                                if((playingArea.getComponent(i+(j*3)).getX()== x) && (playingArea.getComponent(i+(j*3)).getY() == y) )
+                                {
+                                    JLabel temp = (JLabel) playingArea.getComponent(i+(j*3));
+                                    temp.setText(opponentSymbol);
+                                }
+                            }
+                        }
                     playing=true;
                 }
                 catch (IOException ex) 
