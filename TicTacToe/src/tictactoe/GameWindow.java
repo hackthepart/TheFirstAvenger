@@ -151,73 +151,83 @@ public class GameWindow extends javax.swing.JFrame {
     }
     
     private void cellClicked(MouseEvent evt){
-        if(playing){
-            end:{
-                if(!connected)
-                {
-                    JOptionPane.showMessageDialog(null, "Wait for opponent to connect.");
-                }
-                else
-                {
-                    JLabel currentCell = (JLabel) evt.getComponent();
-                    int px = currentCell.getY()/(CELLSIZE+SPACEBETWEENCELLS);
-                    int py = currentCell.getX()/(CELLSIZE+SPACEBETWEENCELLS);
-                    if(moves[px][py]==0)
+        try{
+            if(playing){
+                end:{
+                    if(!connected)
                     {
-                        currentCell.setText(playerSymbol);
-                        if(cli_ser_ComboBox.getSelectedItem().equals("Server"))
+                        JOptionPane.showMessageDialog(null, "Wait for opponent to connect.");
+                    }
+                    else
+                    {
+                        JLabel currentCell = (JLabel) evt.getComponent();
+                        int px = currentCell.getY()/(CELLSIZE+SPACEBETWEENCELLS);
+                        int py = currentCell.getX()/(CELLSIZE+SPACEBETWEENCELLS);
+                        if(moves[px][py]==0)
                         {
-                            sPrintStream.println(px);
-                            sPrintStream.println(py);
-                            update(px,py,0);
-                            if(check(playerSymbol))
+                            currentCell.setText(playerSymbol);
+                            if(cli_ser_ComboBox.getSelectedItem().equals("Server"))
                             {
-                                endGame(0);
-                                break end;
+                                sPrintStream.println(px);
+                                sPrintStream.println(py);
+                                update(px,py,0);
+                                if(check(playerSymbol))
+                                {
+                                    endGame(0);
+                                    break end;
+                                }
+                                playing = false;
+                                turnLabel.setText(opponent + "'s Turn...");
+                                turnLabel.paintImmediately(turnLabel.getVisibleRect());
+                                x=sScanner.nextInt();
+                                y=sScanner.nextInt();
+                                turnLabel.setText("Your Turn...");
+                                turnLabel.paintImmediately(turnLabel.getVisibleRect());
+                                playing = true;
+                                update(x,y,1);
+                                if(check(opponentSymbol))
+                                {
+                                    endGame(1);
+                                    break end;
+                                }
                             }
-                            playing = false;
-                            turnLabel.setText(opponent + "'s Turn...");
-                            turnLabel.paintImmediately(turnLabel.getVisibleRect());
-                            x=sScanner.nextInt();
-                            y=sScanner.nextInt();
-                            turnLabel.setText("Your Turn...");
-                            turnLabel.paintImmediately(turnLabel.getVisibleRect());
-                            playing = true;
-                            update(x,y,1);
-                            if(check(opponentSymbol))
+                            else
                             {
-                                endGame(1);
-                                break end;
-                            }
-                        }
-                        else
-                        {
-                            cPrintStream.println(px);
-                            cPrintStream.println(py);
-                            update(px,py,0);
-                            if(check(playerSymbol))
-                            {
-                                endGame(0);
-                                break end;
-                            }
-                            playing = false;
-                            turnLabel.setText(opponent + "'s Turn...");
-                            turnLabel.paintImmediately(turnLabel.getVisibleRect());
-                            x=cScanner.nextInt();
-                            y=cScanner.nextInt();
-                            turnLabel.setText("Your Turn...");
-                            turnLabel.paintImmediately(turnLabel.getVisibleRect());
-                            playing = true;
-                            moves[x][y]=2;
-                            update(x,y,1);
-                            if(check(opponentSymbol))
-                            {
-                                endGame(1);
-                                break end;
+                                cPrintStream.println(px);
+                                cPrintStream.println(py);
+                                update(px,py,0);
+                                if(check(playerSymbol))
+                                {
+                                    endGame(0);
+                                    break end;
+                                }
+                                playing = false;
+                                turnLabel.setText(opponent + "'s Turn...");
+                                turnLabel.paintImmediately(turnLabel.getVisibleRect());
+                                x=cScanner.nextInt();
+                                y=cScanner.nextInt();
+                                turnLabel.setText("Your Turn...");
+                                turnLabel.paintImmediately(turnLabel.getVisibleRect());
+                                playing = true;
+                                moves[x][y]=2;
+                                update(x,y,1);
+                                if(check(opponentSymbol))
+                                {
+                                    endGame(1);
+                                    break end;
+                                }
                             }
                         }
                     }
                 }
+            }
+        }
+        catch(Exception e)
+        {
+            if (e instanceof java.util.NoSuchElementException)
+            {
+                JOptionPane.showMessageDialog(null, opponent + " disconnected...Exiting");
+                dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
             }
         }
     }
@@ -261,7 +271,8 @@ public class GameWindow extends javax.swing.JFrame {
                 
                 playingLabels[i][j].addMouseListener(new MouseAdapter() {
                     public void mouseClicked(MouseEvent evt){
-                        cellClicked(evt);
+                        if(playing)
+                        {cellClicked(evt);}
                     }
                 });
             }
@@ -333,8 +344,10 @@ public class GameWindow extends javax.swing.JFrame {
             }
         });
 
+        nameTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         nameTextField.setText("Your Name");
 
+        symbolTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         symbolTextField.setText("O");
 
         actionButton.setText("Host");
@@ -344,12 +357,16 @@ public class GameWindow extends javax.swing.JFrame {
             }
         });
 
+        ipTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         ipTextField.setText("127.0.0.1");
         ipTextField.setEnabled(false);
 
         opponentLabel.setText("Opponent:");
 
         youLabel.setText("You:");
+
+        turnLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        turnLabel.setText("Your Turn");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -376,17 +393,17 @@ public class GameWindow extends javax.swing.JFrame {
                                 .addComponent(youLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(playerDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(ipTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(symbolTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(actionButton, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(63, 63, 63)
-                                .addComponent(turnLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(53, 53, 53)
+                                .addComponent(turnLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addContainerGap())))
         );
         layout.setVerticalGroup(
@@ -403,7 +420,7 @@ public class GameWindow extends javax.swing.JFrame {
                     .addComponent(ipTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 227, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(youLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(playerDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -411,7 +428,9 @@ public class GameWindow extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(opponentLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(opponentDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(turnLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(turnLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(8, 8, 8)))
                 .addContainerGap())
         );
 

@@ -49,18 +49,18 @@
                               <Component id="playerDisplay" min="-2" pref="120" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <Group type="103" groupAlignment="0" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Group type="102" attributes="0">
-                              <EmptySpace max="-2" attributes="0"/>
                               <Component id="ipTextField" min="-2" pref="100" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="symbolTextField" min="-2" pref="25" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="actionButton" min="-2" pref="80" max="-2" attributes="0"/>
                           </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="63" max="-2" attributes="0"/>
-                              <Component id="turnLabel" min="-2" pref="116" max="-2" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <EmptySpace min="-2" pref="53" max="-2" attributes="0"/>
+                              <Component id="turnLabel" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -84,7 +84,7 @@
               </Group>
               <EmptySpace pref="227" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
+                  <Group type="102" alignment="1" attributes="0">
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="youLabel" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
                           <Component id="playerDisplay" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
@@ -95,7 +95,10 @@
                           <Component id="opponentDisplay" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <Component id="turnLabel" alignment="1" min="-2" pref="46" max="-2" attributes="0"/>
+                  <Group type="102" alignment="1" attributes="0">
+                      <Component id="turnLabel" min="-2" pref="38" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
+                  </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -129,11 +132,13 @@
     </Component>
     <Component class="javax.swing.JTextField" name="nameTextField">
       <Properties>
+        <Property name="horizontalAlignment" type="int" value="0"/>
         <Property name="text" type="java.lang.String" value="Your Name"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="symbolTextField">
       <Properties>
+        <Property name="horizontalAlignment" type="int" value="0"/>
         <Property name="text" type="java.lang.String" value="O"/>
       </Properties>
     </Component>
@@ -147,6 +152,7 @@
     </Component>
     <Component class="javax.swing.JTextField" name="ipTextField">
       <Properties>
+        <Property name="horizontalAlignment" type="int" value="0"/>
         <Property name="text" type="java.lang.String" value="127.0.0.1"/>
         <Property name="enabled" type="boolean" value="false"/>
       </Properties>
@@ -166,6 +172,10 @@
     <Component class="javax.swing.JLabel" name="opponentDisplay">
     </Component>
     <Component class="javax.swing.JLabel" name="turnLabel">
+      <Properties>
+        <Property name="horizontalAlignment" type="int" value="4"/>
+        <Property name="text" type="java.lang.String" value="Your Turn"/>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>
