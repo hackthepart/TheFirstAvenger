@@ -33,18 +33,18 @@ public class GameWindow extends javax.swing.JFrame {
      */
     private JLabel playingLabels[][] = new JLabel[3][3];
     private final int PLAYINGAREAX = 150, PLAYINGAREAY = 100, CELLSIZE = 40, SPACEBETWEENCELLS = 10;
-    private int currentPlayer = 0,port = 474;
+    private int port = 474;
     int moves[][]=new int[3][3]; //0-empty 1-player 2-opponent
     boolean playing,connected=false,gamedraw=false;
     int x,y;
     JPanel playingArea;
     String ip = "127.0.0.1";
-    String player,opponent;
-    String playerSymbol,opponentSymbol;
-    Socket cSocket,sSocket;
+    String player,opponent;        //names
+    String playerSymbol,opponentSymbol;     //symbols
+    Socket socket;
     ServerSocket serSocket;
-    Scanner cScanner,sScanner;
-    PrintStream cPrintStream,sPrintStream;
+    Scanner scanner;
+    PrintStream printStream;
     
     private void reset(){
         for(int i = 0; i < 3; i++){
@@ -55,38 +55,30 @@ public class GameWindow extends javax.swing.JFrame {
             }
         }
         gamedraw=false;
-        if(cli_ser_ComboBox.getSelectedItem().equals("Server"))
-        {
+        if(cli_ser_ComboBox.getSelectedItem().equals("Server")){
             sersetup();
         }
-        else
-        {
+        else{
             clisetup();
         }
-        currentPlayer = 0;
     }
 
     private void endGame(int currentPlayer){
-        if(currentPlayer==0&&!gamedraw)
-        {
+        if(currentPlayer==0&&!gamedraw){
             JOptionPane.showMessageDialog(null, player + " Wins !!!");
         }
-        else if(currentPlayer==1&&!gamedraw)
-        {
+        else if(currentPlayer==1&&!gamedraw){
             JOptionPane.showMessageDialog(null, opponent + " Wins !!!");
         }
-        else
-        {
+        else{
             JOptionPane.showMessageDialog(null, "This game is draw!!!");
         }    
         int playAgainOrNot = JOptionPane.showConfirmDialog(null, "Want to play again???", "Continue?", 0);
-        if(playAgainOrNot == JOptionPane.YES_OPTION)
-        {
+        if(playAgainOrNot == JOptionPane.YES_OPTION){
             reset();
         }
         else 
             dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
-        
     }
     
     private boolean check(String symbol){
@@ -131,124 +123,109 @@ public class GameWindow extends javax.swing.JFrame {
         
         if(isGameOver)
             return true;
-        for(int i=0;i<3;i++)
-        {
-            for(int j=0;j<3;j++)
-            {
-                if(moves[i][j]==0)
-                {
+        
+        //checking for draw
+        for(int i=0;i<3;i++){
+            for(int j=0;j<3;j++){
+                if(moves[i][j]==0){
                     draw=false;
                 }
             }
         }
-        if(draw)
-        {
+        if(draw){
             gamedraw=true;
             return true;
         }
-        return false;
         
+        return false;
     }
     
     private void cellClicked(MouseEvent evt){
         try{
             if(playing){
                 end:{
-                    if(!connected)
-                    {
+                    if(!connected){
                         JOptionPane.showMessageDialog(null, "Wait for opponent to connect.");
                     }
-                    else
-                    {
+                    else{
                         JLabel currentCell = (JLabel) evt.getComponent();
                         int px = currentCell.getY()/(CELLSIZE+SPACEBETWEENCELLS);
                         int py = currentCell.getX()/(CELLSIZE+SPACEBETWEENCELLS);
-                        if(moves[px][py]==0)
-                        {
+                        if(moves[px][py]==0){
                             currentCell.setText(playerSymbol);
-                            if(cli_ser_ComboBox.getSelectedItem().equals("Server"))
-                            {
-                                sPrintStream.println(px);
-                                sPrintStream.println(py);
+                            if(cli_ser_ComboBox.getSelectedItem().equals("Server")){
+                                printStream.println(px);
+                                printStream.println(py);
                                 update(px,py,0);
-                                if(check(playerSymbol))
-                                {
+                                if(check(playerSymbol)){
                                     endGame(0);
                                     break end;
                                 }
                                 playing = false;
                                 turnLabel.setText(opponent + "'s Turn...");
                                 turnLabel.paintImmediately(turnLabel.getVisibleRect());
-                                x=sScanner.nextInt();
-                                y=sScanner.nextInt();
+                                x=scanner.nextInt();
+                                y=scanner.nextInt();
                                 turnLabel.setText("Your Turn...");
                                 turnLabel.paintImmediately(turnLabel.getVisibleRect());
                                 playing = true;
                                 update(x,y,1);
-                                if(check(opponentSymbol))
-                                {
+                                if(check(opponentSymbol)){
                                     endGame(1);
                                     break end;
                                 }
                             }
-                            else
-                            {
-                                cPrintStream.println(px);
-                                cPrintStream.println(py);
+                            else{
+                                printStream.println(px);
+                                printStream.println(py);
                                 update(px,py,0);
-                                if(check(playerSymbol))
-                                {
+                                if(check(playerSymbol)){
                                     endGame(0);
                                     break end;
                                 }
                                 playing = false;
                                 turnLabel.setText(opponent + "'s Turn...");
                                 turnLabel.paintImmediately(turnLabel.getVisibleRect());
-                                x=cScanner.nextInt();
-                                y=cScanner.nextInt();
+                                x=scanner.nextInt();
+                                y=scanner.nextInt();
                                 turnLabel.setText("Your Turn...");
                                 turnLabel.paintImmediately(turnLabel.getVisibleRect());
                                 playing = true;
                                 moves[x][y]=2;
                                 update(x,y,1);
-                                if(check(opponentSymbol))
-                                {
+                                if(check(opponentSymbol)){
                                     endGame(1);
                                     break end;
                                 }
                             }
                         }
+                        else
+                        {
+                            JOptionPane.showMessageDialog(null, "Choose another spot...");
+                        }
                     }
                 }
             }
         }
-        catch(Exception e)
-        {
-            if (e instanceof java.util.NoSuchElementException)
-            {
+        catch(Exception e){
+            if (e instanceof java.util.NoSuchElementException){
                 JOptionPane.showMessageDialog(null, opponent + " disconnected...Exiting");
                 dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
             }
         }
     }
     
-    private void update(int x,int y,int ply)
-    {
-       for(int i=0;i<3;i++)
-        {
-            for(int j=0;j<3;j++)
-            {
-                if(((playingArea.getComponent(i+(j*3)).getY()/(CELLSIZE+SPACEBETWEENCELLS))== x) && ((playingArea.getComponent(i+(j*3)).getX()/(CELLSIZE+SPACEBETWEENCELLS)) == y) )
-                {
+    private void update(int x,int y,int ply){
+       for(int i=0;i<3;i++){
+            for(int j=0;j<3;j++){
+                if(((playingArea.getComponent(i+(j*3)).getY()/(CELLSIZE+SPACEBETWEENCELLS))== x) && ((playingArea.getComponent(i+(j*3)).getX()/(CELLSIZE+SPACEBETWEENCELLS)) == y) ){
                     JLabel temp = (JLabel) playingArea.getComponent(i+(j*3));
-                    if(ply==0)
-                    {
+                    if(ply==0){
                         moves[x][y]=1;
                         temp.setText(playerSymbol);
                         temp.paintImmediately(temp.getVisibleRect());
                     }
-                    else
-                    {
+                    else{
                         moves[x][y]=2;
                         temp.setText(opponentSymbol);
                         temp.paintImmediately(temp.getVisibleRect());
@@ -257,7 +234,7 @@ public class GameWindow extends javax.swing.JFrame {
             }
         }
     }
-        
+
     private void addPlayingComponents(JPanel playingArea){
         for(int i = 0; i < 3; i++){
             for( int j = 0; j< 3 ; j++){
@@ -271,8 +248,9 @@ public class GameWindow extends javax.swing.JFrame {
                 
                 playingLabels[i][j].addMouseListener(new MouseAdapter() {
                     public void mouseClicked(MouseEvent evt){
-                        if(playing)
-                        {cellClicked(evt);}
+                        if(playing){
+                            cellClicked(evt);
+                        }
                     }
                 });
             }
@@ -283,8 +261,8 @@ public class GameWindow extends javax.swing.JFrame {
         playing = false;
         turnLabel.setText(opponent + "'s Turn...");
         turnLabel.paintImmediately(turnLabel.getVisibleRect());
-        x=cScanner.nextInt();
-        y=cScanner.nextInt();
+        x=scanner.nextInt();
+        y=scanner.nextInt();
         playing =true;
         update(x,y,1);
         turnLabel.setText("Your Turn...");
@@ -365,15 +343,15 @@ public class GameWindow extends javax.swing.JFrame {
 
         youLabel.setText("You:");
 
+        turnLabel.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         turnLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        turnLabel.setText("Your Turn");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
@@ -382,28 +360,29 @@ public class GameWindow extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(cli_ser_ComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(nameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
                                 .addComponent(opponentLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(opponentDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(youLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(playerDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(playerDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
+                                .addComponent(cli_ser_ComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(nameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(69, 69, 69)
+                                .addComponent(turnLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(ipTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(symbolTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(actionButton, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(53, 53, 53)
-                                .addComponent(turnLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(actionButton, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE)))
                         .addContainerGap())))
         );
         layout.setVerticalGroup(
@@ -439,57 +418,49 @@ public class GameWindow extends javax.swing.JFrame {
 
     private void actionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actionButtonActionPerformed
         actionButton.setEnabled(false);
-        if(cli_ser_ComboBox.getSelectedItem().equals("Server"))
-        {
-            if(nameTextField.getText().equals(""))
-            {
+        if(cli_ser_ComboBox.getSelectedItem().equals("Server")){
+            if(nameTextField.getText().equals("")){
                 JOptionPane.showMessageDialog(null, "Please enter name.");                
             }
-            else if(symbolTextField.getText().equals(""))
-            {
+            else if(symbolTextField.getText().equals("")){
                 JOptionPane.showMessageDialog(null, "Please enter symbol.");                
             }
-            else
-            {
+            else{
                 player=nameTextField.getText();
                 nameTextField.setEnabled(false);
                 playerSymbol=symbolTextField.getText();
                 symbolTextField.setEnabled(false);
                 try {
                     serSocket = new ServerSocket(port);
-                    sSocket = serSocket.accept();
-                    sPrintStream = new PrintStream(sSocket.getOutputStream());
-                    sScanner = new Scanner(sSocket.getInputStream());
-                    opponent=sScanner.nextLine();
-                    sPrintStream.println(player);
-                    opponentSymbol=sScanner.nextLine();
-                    sPrintStream.println(playerSymbol);
+                    socket = serSocket.accept();
+                    printStream = new PrintStream(socket.getOutputStream());
+                    scanner = new Scanner(socket.getInputStream());
+                    opponent=scanner.nextLine();
+                    printStream.println(player);
+                    opponentSymbol=scanner.nextLine();
+                    printStream.println(playerSymbol);
                     connected=true;
                     playerDisplay.setText(player);
                     opponentDisplay.setText(opponent);
                     sersetup();
-                } catch (IOException ex) {
+                } 
+                catch (IOException ex) {
                     Logger.getLogger(GameWindow.class.getName()).log(Level.SEVERE, null, ex);
                     actionButton.setEnabled(true);
                 }
             }
         }
-        else
-        {
-            if(ipTextField.getText().equals(""))
-            {
+        else{
+            if(ipTextField.getText().equals("")){
                 JOptionPane.showMessageDialog(null, "Please enter IP Address.");
             }
-            else if(nameTextField.getText().equals(""))
-            {
+            else if(nameTextField.getText().equals("")){
                 JOptionPane.showMessageDialog(null, "Please enter name.");                
             }
-            else if(symbolTextField.getText().equals(""))
-            {
+            else if(symbolTextField.getText().equals("")){
                 JOptionPane.showMessageDialog(null, "Please enter symbol.");                
             }
-            else
-            {
+            else{
                 ip=ipTextField.getText();
                 ipTextField.setEnabled(false);
                 player=nameTextField.getText();
@@ -497,22 +468,19 @@ public class GameWindow extends javax.swing.JFrame {
                 playerSymbol=symbolTextField.getText();
                 symbolTextField.setEnabled(false);
                 try {
-                    cSocket = new Socket(ip,port);
-                    cPrintStream = new PrintStream(cSocket.getOutputStream());
-                    cScanner = new Scanner(cSocket.getInputStream());
-                    cPrintStream.println(player);
-                    opponent=cScanner.nextLine();
-                    cPrintStream.println(playerSymbol);
-                    opponentSymbol=cScanner.nextLine();
-                    if(opponentSymbol.equals(playerSymbol))
-                    {
+                    socket = new Socket(ip,port);
+                    printStream = new PrintStream(socket.getOutputStream());
+                    scanner = new Scanner(socket.getInputStream());
+                    printStream.println(player);
+                    opponent=scanner.nextLine();
+                    printStream.println(playerSymbol);
+                    opponentSymbol=scanner.nextLine();
+                    if(opponentSymbol.equals(playerSymbol)){
                         JOptionPane.showMessageDialog(null, "Same symbol: Changing to default");
-                        if(opponentSymbol.equals("O"))
-                        {
+                        if(opponentSymbol.equals("O")){
                             playerSymbol="X";
                         }
-                        else
-                        {
+                        else{
                             playerSymbol="O";
                         }
                         symbolTextField.setText(playerSymbol);
@@ -523,7 +491,8 @@ public class GameWindow extends javax.swing.JFrame {
                     opponentDisplay.setText(opponent);
                     opponentDisplay.paintImmediately(opponentDisplay.getVisibleRect());
                     clisetup();
-                } catch (IOException ex) {
+                } 
+                catch (IOException ex) {
                     Logger.getLogger(GameWindow.class.getName()).log(Level.SEVERE, null, ex);
                     actionButton.setEnabled(true);
                 }   
@@ -532,14 +501,12 @@ public class GameWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_actionButtonActionPerformed
 
     private void cli_ser_ComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cli_ser_ComboBoxActionPerformed
-        if(cli_ser_ComboBox.getSelectedItem().equals("Server"))
-        {
+        if(cli_ser_ComboBox.getSelectedItem().equals("Server")){
             ipTextField.setEnabled(false);
             symbolTextField.setText("O");
             actionButton.setText("Host");
         }
-        else
-        {
+        else{
             ipTextField.setEnabled(true);
             ipTextField.setText("127.0.0.1");
             symbolTextField.setText("X");
