@@ -1,3 +1,8 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package tictactoe;
 
 import java.awt.event.MouseAdapter;
@@ -21,24 +26,24 @@ public class GameWindow extends javax.swing.JFrame {
     private JLabel playingLabels[][] = new JLabel[3][3];
     private final int PLAYINGAREAX = 110, PLAYINGAREAY = 100, CELLSIZE = 40, SPACEBETWEENCELLS = 10;
     private int currentPlayer = 0;
-   private String pl1name, pl2name,pl1symbol,pl2symbol;
+   private String name1, name2,val1,val2;
     private void reset(){
        for(int i = 0; i < 3; i++){
             for(int j = 0; j < 3; j++){
                 playingLabels[i][j].setText(".");
             }
         }
-       pl1name = JOptionPane.showInputDialog(null, "Player1 Name");
-       pl2name = JOptionPane.showInputDialog(null, "Player2 Name");
+       name1 = JOptionPane.showInputDialog(null, "Player1 Name");
+       name2 = JOptionPane.showInputDialog(null, "Player2 Name");
         currentPlayer = 0;
     }
 
     private void endGame(int currentPlayer){
-        jLabel2.setText("Game Over!");
+        CurrentMover.setText("Game Over!");
         if(currentPlayer==0)
-             JOptionPane.showMessageDialog(null, pl1name + " Wins !!!");
+             JOptionPane.showMessageDialog(null, name1 + " Wins !!!");
         else
-            JOptionPane.showMessageDialog(null, pl2name + " Wins !!!");
+            JOptionPane.showMessageDialog(null, name2 + " Wins !!!");
         int playAgainOrNot = JOptionPane.showConfirmDialog(null, "Want to play again???", "Continue?", 0);
         if(playAgainOrNot == JOptionPane.YES_OPTION)
             reset();
@@ -48,13 +53,13 @@ public class GameWindow extends javax.swing.JFrame {
     }
     
     private void check(int currentPlayer){
-        String currentPlayerMove = pl1symbol;
+        String currentPlayerMove = val1;
         if(currentPlayer == 1){
-            currentPlayerMove = pl2symbol;
-            jLabel2.setText(pl1name);
+            currentPlayerMove = val2;
+            CurrentMover.setText(name1);
         }
         else
-            jLabel2.setText(pl2name);
+            CurrentMover.setText(name2);
         boolean isGameOver = false, flag;
 
         // checking horizontal match
@@ -102,25 +107,25 @@ public class GameWindow extends javax.swing.JFrame {
     private void cellClicked(MouseEvent evt){
         JLabel currentCell = (JLabel) evt.getComponent();
         if(currentPlayer == 0){
-            currentCell.setText(pl1symbol);
+            currentCell.setText(val1);
         }
         else{
-            currentCell.setText(pl2symbol);
+            currentCell.setText(val2);
         }
         currentPlayer = (currentPlayer + 1) % 2;
         check( (currentPlayer + 1) % 2 );
     }
     
     private void addPlayingComponents(JPanel playingArea){
-        pl1name = JOptionPane.showInputDialog(null, "Player1 Name");
-        pl1symbol = JOptionPane.showInputDialog(null, "Enter symbol of choice (X or O)");
-        pl2name = JOptionPane.showInputDialog(null, "Player2 Name");
+        name1 = JOptionPane.showInputDialog(null, "Player1 Name");
+        val1 = JOptionPane.showInputDialog(null, "Enter symbol of choice (X or O)");
+        name2 = JOptionPane.showInputDialog(null, "Player2 Name");
         if(val1.equals("X"))
-            pl2symbol="O";
+            val2="O";
         else
-            pl2symbol="X";
-        JOptionPane.showMessageDialog(null, "Your symbol is "+pl2symbol);
-        jLabel2.setText(pl1name);
+            val2="X";
+        JOptionPane.showMessageDialog(null, "Your symbol is "+val2);
+        CurrentMover.setText(name1);
         
         for(int i = 0; i < 3; i++){
             for( int j = 0; j< 3 ; j++){
@@ -165,18 +170,18 @@ public class GameWindow extends javax.swing.JFrame {
     private void initComponents() {
 
         title = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        CurrentMoveDisplay = new javax.swing.JLabel();
+        CurrentMover = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         title.setFont(new java.awt.Font("Ubuntu", 1, 24)); // NOI18N
         title.setText("TIC TAC TOE");
 
-        jLabel1.setFont(new java.awt.Font("Nirmala UI Semilight", 1, 14)); // NOI18N
-        jLabel1.setText("Current Move:");
+        CurrentMoveDisplay.setFont(new java.awt.Font("Nirmala UI Semilight", 1, 14)); // NOI18N
+        CurrentMoveDisplay.setText("Current Move:");
 
-        jLabel2.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+        CurrentMover.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -186,12 +191,14 @@ public class GameWindow extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(119, 119, 119)
+                        .addComponent(title))
                     .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(10, 10, 10)
-                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel1))))
+                                .addComponent(CurrentMover, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(CurrentMoveDisplay))))
                 .addContainerGap(108, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -200,9 +207,9 @@ public class GameWindow extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(title)
                 .addGap(29, 29, 29)
-                .addComponent(jLabel1)
+                .addComponent(CurrentMoveDisplay)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(CurrentMover, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(241, Short.MAX_VALUE))
         );
 
@@ -245,8 +252,8 @@ public class GameWindow extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify                     
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel CurrentMoveDisplay;
+    private javax.swing.JLabel CurrentMover;
     private javax.swing.JLabel title;
     // End of variables declaration                   
 }
