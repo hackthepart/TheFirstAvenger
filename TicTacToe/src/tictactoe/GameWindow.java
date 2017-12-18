@@ -63,7 +63,7 @@ public class GameWindow extends javax.swing.JFrame {
         }
     }
 
-    private void endGame(int currentPlayer){
+    private void endGame(int currentPlayer) throws IOException{
         if(currentPlayer==0&&!gamedraw){
             JOptionPane.showMessageDialog(null, player + " Wins !!!");
         }
@@ -77,8 +77,13 @@ public class GameWindow extends javax.swing.JFrame {
         if(playAgainOrNot == JOptionPane.YES_OPTION){
             reset();
         }
-        else 
+        else{
+            socket.close();
+            serSocket.close();
+            scanner.close();
+            printStream.close();
             dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+        }
     }
     
     private boolean check(String symbol){
