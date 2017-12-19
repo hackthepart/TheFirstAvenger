@@ -24,7 +24,7 @@ public class GameWindow extends javax.swing.JFrame
     /**
      * Creates new form GameWindow
      */
-    int indicator=0;
+    int indicator=0,resetindicator=0;
     private JLabel playingLabels[][] = new JLabel[3][3];
     private final int PLAYINGAREAX = 110, PLAYINGAREAY = 100, CELLSIZE = 40, SPACEBETWEENCELLS = 10;
     private int currentPlayer = 0;
@@ -36,7 +36,18 @@ public class GameWindow extends javax.swing.JFrame
                 playingLabels[i][j].setText(".");
             }
         }
-        currentPlayer = 0;
+        if(indicator==0)
+        {
+            currentPlayer = 0;
+            resetindicator=1;
+            DisplayForPlayerTurn.setText(Player1Name.getText());
+        }
+        if(indicator==1)
+        {
+            currentPlayer = 1;
+            resetindicator=1;
+            DisplayForPlayerTurn.setText(Player1Name.getText());
+        }
     }
 //Code to announce the winner
     private void endGame(int currentPlayer)
@@ -142,19 +153,26 @@ public class GameWindow extends javax.swing.JFrame
     //When mouse clicks one of labels 
     private void cellClicked(MouseEvent evt){
         JLabel currentCell = (JLabel) evt.getComponent();
-        if(currentPlayer == 0){
+    //For Invalid Move 
+        int InvalidMoveIndicator = 0;
+        if(currentCell.getText()!=".")
+        {
+            JOptionPane.showMessageDialog(null,"Invalid Move");
+            InvalidMoveIndicator = 1;
+        }
+        if(currentPlayer == 0&&InvalidMoveIndicator==0){
             currentCell.setText("O");
             //Displaying player whose turn is  
-            if(indicator==0)
+            if(indicator==0&&resetindicator==0)
             {
                 DisplayForPlayerTurn.setText(Player2Name.getText());
             }
             else DisplayForPlayerTurn.setText(Player1Name.getText());
         }
-        else{
+        else if(currentPlayer == 1&&InvalidMoveIndicator==0){
             currentCell.setText("X");
             //Displaying player whose turn is
-            if(indicator==0)
+            if(indicator==0&&resetindicator==0)
             {
                 DisplayForPlayerTurn.setText(Player1Name.getText());
             }
