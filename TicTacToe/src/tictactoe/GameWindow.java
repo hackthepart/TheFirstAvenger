@@ -28,13 +28,13 @@ public class GameWindow extends javax.swing.JFrame
      * Creates new form GameWindow
      */
     private int start=0;//for controlling whether the game should be started or not
+    //game shuld start only when names are entered and symbols selected
     private JLabel playinglabels[][] = new JLabel[3][3];
     private final int PLAYINGAREAX = 242, PLAYINGAREAY = 100, CELLSIZE = 25, SPACEBETWEENCELLS = 20;
     private int currentPlayer = 0;
-    private int c=9;
-    //private JLabel player1_name=new JLabel();
-    //private JLabel player2_name=new JLabel();
-    
+    private int c=9;//to count for the number of moves before any result
+    //if 9 moves are over and no result come than its a draw
+       
     
     private void reset()
     {
@@ -46,14 +46,14 @@ public class GameWindow extends javax.swing.JFrame
             }
         }
         currentPlayer = 0;
-        guide1.setVisible(true);
+        guide1.setVisible(true);//to display symbol of 1st player
         guide1.setText("");
         Name_1_TF.setVisible(true);
         Name_1_TF.setEnabled(true);
         Name_1_TF.setEditable(true);
         Name_1_TF.setText("");
         Player1_name.setText("ENTER PLAYER 1 NAME");
-        guide2.setText("");
+        guide2.setText("");//to display symbol of 2nd player
         guide2.setVisible(true);
         Name_2_TF.setVisible(true);
         Name_2_TF.setEnabled(true);
@@ -63,7 +63,7 @@ public class GameWindow extends javax.swing.JFrame
         X_1.setEnabled(true);X_1.setEnabled(true);X_2.setEnabled(true);O_1.setEnabled(true);O_2.setEnabled(true);
         Start.setEnabled(true);
         c=0;
-        start=0;
+        start=0;//initially game must not start
     }
     
     
@@ -71,7 +71,7 @@ public class GameWindow extends javax.swing.JFrame
 
     private void endGame(int currentPlayer)
     {
-        TURN.setText("");
+        TURN.setText("");//label to display the current player's turn
         if(currentPlayer==0)
         JOptionPane.showMessageDialog(this, Player1_name.getText()+" WINS!!!");
         else JOptionPane.showMessageDialog(this, Player2_name.getText()+" WINS!!!");
@@ -86,7 +86,7 @@ public class GameWindow extends javax.swing.JFrame
     {
         String currentPlayerMove="";
         if(currentPlayer==0) currentPlayerMove=guide1.getText();
-        if(currentPlayer==1) currentPlayerMove = guide2.getText();
+        if(currentPlayer==1) currentPlayerMove=guide2.getText();
         boolean isGameOver = false;
         boolean flag;
 
@@ -133,7 +133,7 @@ public class GameWindow extends javax.swing.JFrame
         
         
         //checking for draw        
-        if(c==0)
+        if(c==0)//no playinglabels are empty now so its a draw
         {
             JOptionPane.showMessageDialog(this,"ITS A DRAW!!");
             int playAgainOrNot = JOptionPane.showConfirmDialog(this, "Want to play again???", "Continue?", 0);
@@ -150,9 +150,9 @@ public class GameWindow extends javax.swing.JFrame
     
     private void cellClicked(MouseEvent evt)
     {
-        if(start==1)
+        if(start==1)//only when game begins
         {
-            c--;
+            c--;//only 9 moves allowed initial value of c=9 and at c=0 game draws
             JLabel currentCell = (JLabel) evt.getComponent();        
             if(currentPlayer == 0)
             {
@@ -195,9 +195,7 @@ public class GameWindow extends javax.swing.JFrame
                     }
                 });
             }
-        }
-        String name1=Name_1_TF.getText();
-        String name2=Name_2_TF.getText();
+        }       
         
        
         
@@ -205,8 +203,7 @@ public class GameWindow extends javax.swing.JFrame
     
     public GameWindow() //constructor
     {
-        initComponents();
-        
+        initComponents();        
         // Adding panel
         JPanel playingArea = new JPanel();
         playingArea.setLocation(PLAYINGAREAX, PLAYINGAREAY);
@@ -438,7 +435,7 @@ public class GameWindow extends javax.swing.JFrame
     }//GEN-LAST:event_Name_2_TFKeyPressed
 
     private void O_1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_O_1ActionPerformed
-        X_2.setSelected(true);
+        X_2.setSelected(true);//alternate symbols
     }//GEN-LAST:event_O_1ActionPerformed
 
     private void O_2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_O_2ActionPerformed
@@ -458,7 +455,7 @@ public class GameWindow extends javax.swing.JFrame
         {
             JOptionPane.showMessageDialog(this,"Please Enter Name For Both The Players");
         }
-        else
+        else//only after entering the names
         {
             X_1.setEnabled(false);
             X_2.setEnabled(false);
@@ -486,9 +483,8 @@ public class GameWindow extends javax.swing.JFrame
                 guide2.setText("X");
                 JOptionPane.showMessageDialog(this,"PLAYER 1 is "+Player1_name.getText()+" With Symbol= O  And  "
                 + "Player 2 is "+Player2_name.getText()+" With Symbol= X");
-            }
-            
-            start=1;
+            }            
+            start=1;//now start the game after cecking all the options
             Start.setEnabled(false);
             
         }
