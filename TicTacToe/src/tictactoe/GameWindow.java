@@ -153,7 +153,13 @@ public class GameWindow extends javax.swing.JFrame
         if(start==1)//only when game begins
         {
             c--;//only 9 moves allowed initial value of c=9 and at c=0 game draws
-            JLabel currentCell = (JLabel) evt.getComponent();        
+            JLabel currentCell = (JLabel) evt.getComponent();
+            if(!(currentCell.getText()=="."))//To allow clicking on a fresh cell only
+                {
+                    JOptionPane.showMessageDialog(this,"Selecting A Already Printed Cell Not Allowed");
+                }
+            else
+            {
             if(currentPlayer == 0)
             {
                 currentCell.setText(guide1.getText());
@@ -166,6 +172,7 @@ public class GameWindow extends javax.swing.JFrame
             }
             currentPlayer =(currentPlayer + 1) % 2;
             check( (currentPlayer + 1) % 2 );
+            }
         }
         else
         {
