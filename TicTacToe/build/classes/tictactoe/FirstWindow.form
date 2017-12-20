@@ -13,6 +13,26 @@
         <Property name="text" type="java.lang.String" value="jButton2"/>
       </Properties>
     </Component>
+    <Component class="javax.swing.ButtonGroup" name="buttonGroup4">
+    </Component>
+    <Container class="javax.swing.JMenuBar" name="jMenuBar1">
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout">
+        <Property name="useNullLayout" type="boolean" value="true"/>
+      </Layout>
+      <SubComponents>
+        <Menu class="javax.swing.JMenu" name="jMenu1">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="File"/>
+          </Properties>
+        </Menu>
+        <Menu class="javax.swing.JMenu" name="jMenu2">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Edit"/>
+          </Properties>
+        </Menu>
+      </SubComponents>
+    </Container>
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
@@ -42,21 +62,21 @@
                   <Group type="102" alignment="1" attributes="0">
                       <Group type="103" groupAlignment="1" attributes="0">
                           <Component id="playerName1" min="-2" pref="183" max="-2" attributes="0"/>
-                          <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
+                          <Component id="Player1Sign" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Group type="103" groupAlignment="1" attributes="0">
                           <Group type="102" alignment="1" attributes="0">
                               <EmptySpace min="-2" pref="181" max="-2" attributes="0"/>
-                              <Component id="rb1X" min="-2" pref="55" max="-2" attributes="0"/>
+                              <Component id="Player1X" min="-2" pref="55" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="104" max="-2" attributes="0"/>
-                              <Component id="rb1O" min="-2" pref="50" max="-2" attributes="0"/>
+                              <Component id="Player1O" min="-2" pref="50" max="-2" attributes="0"/>
                               <EmptySpace max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="1" attributes="0">
                               <EmptySpace pref="135" max="32767" attributes="0"/>
                               <Group type="103" groupAlignment="1" attributes="0">
-                                  <Component id="name2" min="-2" pref="382" max="-2" attributes="0"/>
-                                  <Component id="name1" min="-2" pref="382" max="-2" attributes="0"/>
+                                  <Component id="Player2" min="-2" pref="382" max="-2" attributes="0"/>
+                                  <Component id="Player1" min="-2" pref="382" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="92" max="-2" attributes="0"/>
                           </Group>
@@ -65,17 +85,17 @@
                   <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="1" attributes="0">
                           <Component id="playerName2" min="-2" pref="177" max="-2" attributes="0"/>
-                          <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
+                          <Component id="Player2Sign" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="173" max="-2" attributes="0"/>
-                      <Component id="rb2X" min="-2" pref="57" max="-2" attributes="0"/>
+                      <Component id="Player2X" min="-2" pref="57" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="113" max="-2" attributes="0"/>
-                      <Component id="rb2O" min="-2" max="-2" attributes="0"/>
+                      <Component id="Player2O" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace min="-2" pref="245" max="-2" attributes="0"/>
-                      <Component id="button1" min="-2" max="-2" attributes="0"/>
+                      <Component id="GoToGameButton" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
                       <Component id="rulesButton" min="-2" pref="70" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="48" max="-2" attributes="0"/>
@@ -96,30 +116,29 @@
               <Component id="jLabel1" min="-2" pref="28" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="54" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="name1" alignment="3" min="-2" pref="39" max="-2" attributes="0"/>
+                  <Component id="Player1" alignment="3" min="-2" pref="39" max="-2" attributes="0"/>
                   <Component id="playerName1" alignment="3" min="-2" pref="39" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jLabel3" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
-                  <Component id="rb1X" alignment="3" min="-2" pref="43" max="-2" attributes="0"/>
-                  <Component id="rb1O" alignment="3" min="-2" pref="43" max="-2" attributes="0"/>
+                  <Component id="Player1Sign" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
+                  <Component id="Player1X" alignment="3" min="-2" pref="43" max="-2" attributes="0"/>
+                  <Component id="Player1O" alignment="3" min="-2" pref="43" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="playerName2" alignment="3" min="-2" pref="42" max="-2" attributes="0"/>
-                  <Component id="name2" alignment="3" min="-2" pref="42" max="-2" attributes="0"/>
+                  <Component id="Player2" alignment="3" min="-2" pref="42" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jLabel5" alignment="3" min="-2" pref="38" max="-2" attributes="0"/>
-                          <Component id="rb2X" alignment="3" min="-2" pref="41" max="-2" attributes="0"/>
-                          <Component id="rb2O" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="Player2Sign" alignment="3" min="-2" pref="38" max="-2" attributes="0"/>
+                          <Component id="Player2X" alignment="3" min="-2" pref="41" max="-2" attributes="0"/>
+                          <Component id="Player2O" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="32767" attributes="0"/>
-                      <Component id="button1" min="-2" pref="39" max="-2" attributes="0"/>
+                      <Component id="GoToGameButton" min="-2" pref="39" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
@@ -140,9 +159,9 @@
         <Property name="text" type="java.lang.String" value="WELCOME TO THE GAME OF TIC-TAC-TOE !!"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="name1">
+    <Component class="javax.swing.JTextField" name="Player1">
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="name1ActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Player1ActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="playerName1">
@@ -153,7 +172,7 @@
         <Property name="text" type="java.lang.String" value="PLAYER NAME - 1"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabel3">
+    <Component class="javax.swing.JLabel" name="Player1Sign">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="DejaVu Sans" size="18" style="1"/>
@@ -161,7 +180,7 @@
         <Property name="text" type="java.lang.String" value="SIGN FOR PLAYER 1"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="button1">
+    <Component class="javax.swing.JButton" name="GoToGameButton">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="DejaVu Sans" size="15" style="1"/>
@@ -169,10 +188,10 @@
         <Property name="text" type="java.lang.String" value="GO TO GAME&#xa;"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="button1ActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="GoToGameButtonActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JRadioButton" name="rb1X">
+    <Component class="javax.swing.JRadioButton" name="Player1X">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="DejaVu Sans" size="18" style="1"/>
@@ -180,10 +199,10 @@
         <Property name="text" type="java.lang.String" value="X"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rb1XActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Player1XActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JRadioButton" name="rb1O">
+    <Component class="javax.swing.JRadioButton" name="Player1O">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="DejaVu Sans" size="18" style="1"/>
@@ -191,7 +210,7 @@
         <Property name="text" type="java.lang.String" value="O"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rb1OActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Player1OActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="playerName2">
@@ -202,7 +221,7 @@
         <Property name="text" type="java.lang.String" value="PLAYER NAME - 2"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabel5">
+    <Component class="javax.swing.JLabel" name="Player2Sign">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="DejaVu Sans" size="18" style="1"/>
@@ -210,12 +229,12 @@
         <Property name="text" type="java.lang.String" value="SIGN FOR PLAYER 2"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="name2">
+    <Component class="javax.swing.JTextField" name="Player2">
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="name2ActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Player2ActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JRadioButton" name="rb2X">
+    <Component class="javax.swing.JRadioButton" name="Player2X">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="DejaVu Sans" size="18" style="1"/>
@@ -223,10 +242,10 @@
         <Property name="text" type="java.lang.String" value="X"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rb2XActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Player2XActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JRadioButton" name="rb2O">
+    <Component class="javax.swing.JRadioButton" name="Player2O">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="DejaVu Sans" size="18" style="1"/>
@@ -234,7 +253,7 @@
         <Property name="text" type="java.lang.String" value="O"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rb2OActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Player2OActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="rulesButton">

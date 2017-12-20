@@ -42,88 +42,98 @@ public class FirstWindow extends javax.swing.JFrame {
         buttonGroup2 = new javax.swing.ButtonGroup();
         buttonGroup3 = new javax.swing.ButtonGroup();
         jButton2 = new javax.swing.JButton();
+        buttonGroup4 = new javax.swing.ButtonGroup();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenu2 = new javax.swing.JMenu();
         jLabel1 = new javax.swing.JLabel();
-        name1 = new javax.swing.JTextField();
+        Player1 = new javax.swing.JTextField();
         playerName1 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        button1 = new javax.swing.JButton();
-        rb1X = new javax.swing.JRadioButton();
-        rb1O = new javax.swing.JRadioButton();
+        Player1Sign = new javax.swing.JLabel();
+        GoToGameButton = new javax.swing.JButton();
+        Player1X = new javax.swing.JRadioButton();
+        Player1O = new javax.swing.JRadioButton();
         playerName2 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        name2 = new javax.swing.JTextField();
-        rb2X = new javax.swing.JRadioButton();
-        rb2O = new javax.swing.JRadioButton();
+        Player2Sign = new javax.swing.JLabel();
+        Player2 = new javax.swing.JTextField();
+        Player2X = new javax.swing.JRadioButton();
+        Player2O = new javax.swing.JRadioButton();
         rulesButton = new javax.swing.JButton();
 
         jButton2.setText("jButton2");
+
+        jMenu1.setText("File");
+        jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("Edit");
+        jMenuBar1.add(jMenu2);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("DejaVu Sans Mono", 1, 24)); // NOI18N
         jLabel1.setText("WELCOME TO THE GAME OF TIC-TAC-TOE !!");
 
-        name1.addActionListener(new java.awt.event.ActionListener() {
+        Player1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                name1ActionPerformed(evt);
+                Player1ActionPerformed(evt);
             }
         });
 
         playerName1.setFont(new java.awt.Font("DejaVu Sans", 1, 18)); // NOI18N
         playerName1.setText("PLAYER NAME - 1");
 
-        jLabel3.setFont(new java.awt.Font("DejaVu Sans", 1, 18)); // NOI18N
-        jLabel3.setText("SIGN FOR PLAYER 1");
+        Player1Sign.setFont(new java.awt.Font("DejaVu Sans", 1, 18)); // NOI18N
+        Player1Sign.setText("SIGN FOR PLAYER 1");
 
-        button1.setFont(new java.awt.Font("DejaVu Sans", 1, 15)); // NOI18N
-        button1.setText("GO TO GAME\n");
-        button1.addActionListener(new java.awt.event.ActionListener() {
+        GoToGameButton.setFont(new java.awt.Font("DejaVu Sans", 1, 15)); // NOI18N
+        GoToGameButton.setText("GO TO GAME\n");
+        GoToGameButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button1ActionPerformed(evt);
+                GoToGameButtonActionPerformed(evt);
             }
         });
 
-        rb1X.setFont(new java.awt.Font("DejaVu Sans", 1, 18)); // NOI18N
-        rb1X.setText("X");
-        rb1X.addActionListener(new java.awt.event.ActionListener() {
+        Player1X.setFont(new java.awt.Font("DejaVu Sans", 1, 18)); // NOI18N
+        Player1X.setText("X");
+        Player1X.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rb1XActionPerformed(evt);
+                Player1XActionPerformed(evt);
             }
         });
 
-        rb1O.setFont(new java.awt.Font("DejaVu Sans", 1, 18)); // NOI18N
-        rb1O.setText("O");
-        rb1O.addActionListener(new java.awt.event.ActionListener() {
+        Player1O.setFont(new java.awt.Font("DejaVu Sans", 1, 18)); // NOI18N
+        Player1O.setText("O");
+        Player1O.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rb1OActionPerformed(evt);
+                Player1OActionPerformed(evt);
             }
         });
 
         playerName2.setFont(new java.awt.Font("DejaVu Sans", 1, 18)); // NOI18N
         playerName2.setText("PLAYER NAME - 2");
 
-        jLabel5.setFont(new java.awt.Font("DejaVu Sans", 1, 18)); // NOI18N
-        jLabel5.setText("SIGN FOR PLAYER 2");
+        Player2Sign.setFont(new java.awt.Font("DejaVu Sans", 1, 18)); // NOI18N
+        Player2Sign.setText("SIGN FOR PLAYER 2");
 
-        name2.addActionListener(new java.awt.event.ActionListener() {
+        Player2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                name2ActionPerformed(evt);
+                Player2ActionPerformed(evt);
             }
         });
 
-        rb2X.setFont(new java.awt.Font("DejaVu Sans", 1, 18)); // NOI18N
-        rb2X.setText("X");
-        rb2X.addActionListener(new java.awt.event.ActionListener() {
+        Player2X.setFont(new java.awt.Font("DejaVu Sans", 1, 18)); // NOI18N
+        Player2X.setText("X");
+        Player2X.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rb2XActionPerformed(evt);
+                Player2XActionPerformed(evt);
             }
         });
 
-        rb2O.setFont(new java.awt.Font("DejaVu Sans", 1, 18)); // NOI18N
-        rb2O.setText("O");
-        rb2O.addActionListener(new java.awt.event.ActionListener() {
+        Player2O.setFont(new java.awt.Font("DejaVu Sans", 1, 18)); // NOI18N
+        Player2O.setText("O");
+        Player2O.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rb2OActionPerformed(evt);
+                Player2OActionPerformed(evt);
             }
         });
 
@@ -144,32 +154,32 @@ public class FirstWindow extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(playerName1, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3))
+                            .addComponent(Player1Sign))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(181, 181, 181)
-                                .addComponent(rb1X, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(Player1X, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(104, 104, 104)
-                                .addComponent(rb1O, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(Player1O, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 135, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(name2, javax.swing.GroupLayout.PREFERRED_SIZE, 382, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(name1, javax.swing.GroupLayout.PREFERRED_SIZE, 382, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(Player2, javax.swing.GroupLayout.PREFERRED_SIZE, 382, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(Player1, javax.swing.GroupLayout.PREFERRED_SIZE, 382, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(92, 92, 92))))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(playerName2, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel5))
+                            .addComponent(Player2Sign))
                         .addGap(173, 173, 173)
-                        .addComponent(rb2X, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(Player2X, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(113, 113, 113)
-                        .addComponent(rb2O)
+                        .addComponent(Player2O)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(245, 245, 245)
-                        .addComponent(button1)
+                        .addComponent(GoToGameButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(rulesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(48, 48, 48))))
@@ -185,26 +195,25 @@ public class FirstWindow extends javax.swing.JFrame {
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(54, 54, 54)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(name1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Player1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(playerName1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(32, 32, 32)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(rb1X, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(rb1O, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(Player1Sign, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Player1X, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Player1O, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(26, 26, 26)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(playerName2, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(name2, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                    .addComponent(Player2, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(rb2X, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(rb2O))
+                            .addComponent(Player2Sign, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(Player2X, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(Player2O))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(GoToGameButton, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(rulesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -214,19 +223,19 @@ public class FirstWindow extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void name1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_name1ActionPerformed
+    private void Player1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Player1ActionPerformed
        
-    }//GEN-LAST:event_name1ActionPerformed
+    }//GEN-LAST:event_Player1ActionPerformed
 
-    private void rb1XActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rb1XActionPerformed
-       rb1X.setSelected(true);
-       rb1O.setSelected(false);
+    private void Player1XActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Player1XActionPerformed
+       Player1X.setSelected(true);
+       Player1O.setSelected(false);
         sign1=1;
-    }//GEN-LAST:event_rb1XActionPerformed
+    }//GEN-LAST:event_Player1XActionPerformed
 
-    private void button1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button1ActionPerformed
-         pName1 = name1.getText();
-        pName2 = name2.getText();
+    private void GoToGameButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GoToGameButtonActionPerformed
+         pName1 = Player1.getText();
+        pName2 = Player2.getText();
         if((pName1 != null)&&(pName2 !=null)&&(sign1 != sign2)){
         new GameWindow(pName1, pName2, sign1, sign2).setVisible(true);
         this.setVisible(false);
@@ -235,29 +244,29 @@ public class FirstWindow extends javax.swing.JFrame {
            JOptionPane.showMessageDialog(null, "Player name unfilled or wrong sign choice.\nTry Again.");
        }
         
-    }//GEN-LAST:event_button1ActionPerformed
+    }//GEN-LAST:event_GoToGameButtonActionPerformed
 
-    private void name2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_name2ActionPerformed
+    private void Player2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Player2ActionPerformed
           
-    }//GEN-LAST:event_name2ActionPerformed
+    }//GEN-LAST:event_Player2ActionPerformed
 
-    private void rb1OActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rb1OActionPerformed
-        rb1X.setSelected(false);
-       rb1O.setSelected(true);
+    private void Player1OActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Player1OActionPerformed
+        Player1X.setSelected(false);
+       Player1O.setSelected(true);
        sign1 = 0;
-    }//GEN-LAST:event_rb1OActionPerformed
+    }//GEN-LAST:event_Player1OActionPerformed
 
-    private void rb2XActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rb2XActionPerformed
-      rb2X.setSelected(true);
-       rb2O.setSelected(false);
+    private void Player2XActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Player2XActionPerformed
+      Player2X.setSelected(true);
+       Player2O.setSelected(false);
         sign2=1;
-    }//GEN-LAST:event_rb2XActionPerformed
+    }//GEN-LAST:event_Player2XActionPerformed
 
-    private void rb2OActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rb2OActionPerformed
-        rb2X.setSelected(false);
-       rb2O.setSelected(true);
+    private void Player2OActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Player2OActionPerformed
+        Player2X.setSelected(false);
+       Player2O.setSelected(true);
         sign2=0;
-    }//GEN-LAST:event_rb2OActionPerformed
+    }//GEN-LAST:event_Player2OActionPerformed
 
     private void rulesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rulesButtonActionPerformed
         new rules().setVisible(true);
@@ -303,22 +312,26 @@ public class FirstWindow extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton button1;
+    private javax.swing.JButton GoToGameButton;
+    private javax.swing.JTextField Player1;
+    private javax.swing.JRadioButton Player1O;
+    private javax.swing.JLabel Player1Sign;
+    private javax.swing.JRadioButton Player1X;
+    private javax.swing.JTextField Player2;
+    private javax.swing.JRadioButton Player2O;
+    private javax.swing.JLabel Player2Sign;
+    private javax.swing.JRadioButton Player2X;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.ButtonGroup buttonGroup3;
+    private javax.swing.ButtonGroup buttonGroup4;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JTextField name1;
-    private javax.swing.JTextField name2;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JLabel playerName1;
     private javax.swing.JLabel playerName2;
-    private javax.swing.JRadioButton rb1O;
-    private javax.swing.JRadioButton rb1X;
-    private javax.swing.JRadioButton rb2O;
-    private javax.swing.JRadioButton rb2X;
     private javax.swing.JButton rulesButton;
     // End of variables declaration//GEN-END:variables
 }
