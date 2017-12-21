@@ -133,7 +133,15 @@ public class GameWindow extends javax.swing.JFrame
         
         
         //checking for draw        
-        if(c==0)//no playinglabels are empty now so its a draw
+        
+        boolean check=true;
+        if(isGameOver)
+        {
+            endGame(currentPlayer);
+            check=false;
+        }    
+        
+        if(c==0 && check==true)//no playinglabels are empty now so its a draw and no one wins in last chance
         {
             JOptionPane.showMessageDialog(this,"ITS A DRAW!!");
             int playAgainOrNot = JOptionPane.showConfirmDialog(this, "Want to play again???", "Continue?", 0);
@@ -143,35 +151,32 @@ public class GameWindow extends javax.swing.JFrame
                 dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
         }
         
-        if(isGameOver)
-            endGame(currentPlayer);
-        
     }
     
     private void cellClicked(MouseEvent evt)
     {
         if(start==1)//only when game begins
         {
-            c--;//only 9 moves allowed initial value of c=9 and at c=0 game draws
             JLabel currentCell = (JLabel) evt.getComponent();
             if(!(currentCell.getText()=="."))//To allow clicking on a fresh cell only
+            {
+                JOptionPane.showMessageDialog(this,"Selecting A Already Printed Cell Not Allowed");
+            }
+            else
+            {
+                c--;//only 9 moves allowed initial value of c=9 and at c=0 game draws    
+                if(currentPlayer == 0)
                 {
-                    JOptionPane.showMessageDialog(this,"Selecting A Already Printed Cell Not Allowed");
+                    currentCell.setText(guide1.getText());
+                    TURN.setText(Player2_name.getText()+"'s turn");
                 }
-            else
-            {
-            if(currentPlayer == 0)
-            {
-                currentCell.setText(guide1.getText());
-                TURN.setText(Player2_name.getText()+"'s turn");
-            }
-            else
-            {           
-                currentCell.setText(guide2.getText());
-                TURN.setText(Player1_name.getText()+"'s turn");
-            }
-            currentPlayer =(currentPlayer + 1) % 2;
-            check( (currentPlayer + 1) % 2 );
+                else
+                {
+                    currentCell.setText(guide2.getText());
+                    TURN.setText(Player1_name.getText()+"'s turn");
+                }
+                currentPlayer =(currentPlayer + 1) % 2;
+                check( (currentPlayer + 1) % 2 );
             }
         }
         else
