@@ -6,5 +6,8 @@ A simple TicTacToe game. Game is developed using Netbeans IDE in JAVA, so you ca
 2. Option for players to choose from 'X' or 'O'.
 3. Display the name of player whose current turn is.
 4. Players should be able to play from different machines. One player will host the game and the other player will connect to it.
-
+I have added features 
+1.Players can now watch their option
+2.Player cannot play in oponent's turn
+3.Thre is  ac check for tie
 <b> Current Issues can be seen in the issue section. Again you are free to add more issues. </b>
